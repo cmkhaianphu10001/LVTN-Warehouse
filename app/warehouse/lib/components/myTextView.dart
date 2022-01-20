@@ -6,11 +6,12 @@ class MyTextView extends StatelessWidget {
     this.label,
     @required this.content,
     this.width,
+    this.height,
     this.textSize,
   }) : super(key: key);
 
   final String label;
-  final double width;
+  final double width, height;
   final String content;
   final double textSize;
 
@@ -34,7 +35,7 @@ class MyTextView extends StatelessWidget {
             bottom: 5,
           ),
           alignment: Alignment.centerLeft,
-          height: 70,
+          height: height != null ? height : 70,
           width: width != null ? width : size.width * 0.8,
           decoration: BoxDecoration(
             color: Colors.grey[200],

@@ -190,7 +190,7 @@ class _EditProductImportState extends State<EditProductImport> {
                       ),
 //Btn
                       Positioned(
-                        top: size.height * 0.73,
+                        top: size.height * 0.7,
                         child: Container(
                           padding: EdgeInsets.fromLTRB(
                               size.width * 0.05, 0, size.width * 0.05, 0),
@@ -199,7 +199,7 @@ class _EditProductImportState extends State<EditProductImport> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Container(
-                                height: size.height * 0.1,
+                                height: size.height * 0.12,
                                 width: size.width * 0.4,
                                 child: Row(
                                   mainAxisAlignment:
@@ -207,7 +207,7 @@ class _EditProductImportState extends State<EditProductImport> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
                                     ShortButton(
-                                      height: 60,
+                                      height: 50,
                                       width: size.width * 0.1,
                                       onclick: () async {
                                         if (qty <= 1) {
@@ -239,11 +239,12 @@ class _EditProductImportState extends State<EditProductImport> {
                                       text: '-',
                                     ),
                                     MyTextView(
-                                      width: 70,
+                                      width: 50,
+                                      height: 50,
                                       content: qty.toString(),
                                     ),
                                     ShortButton(
-                                      height: 60,
+                                      height: 50,
                                       width: size.width * 0.1,
                                       onclick: () async {
                                         setState(() {
