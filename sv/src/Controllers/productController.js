@@ -239,7 +239,7 @@ module.exports.ConfirmUndealProduct = async (req, res) => {
                 return res.status(200).send('Denied!');
             }
 
-            return res.status(200).send('manager confirmed')
+            return res.status(200).send('Done')
 
 
         } else {

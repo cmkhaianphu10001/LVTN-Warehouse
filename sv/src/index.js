@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 const app = require('./app')
 
 
-mongoose.connect(process.env.MONGO_URL, {
+mongoose.connect(process.env.MONGO_URL_ONL, {
     useNewUrlParser: true,
     useUnifiedtopology: true,
 }).then(() => console.log('Connected to mongodb!'))

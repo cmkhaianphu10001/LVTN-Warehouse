@@ -21,7 +21,7 @@ const transporter = nodeMailer.createTransport({
     service: 'gmail',
     auth: {
         user: 'cmkhai.anphu10001@gmail.com',
-        pass: '0395540052Aa'
+        pass: 'rlhwrsiabemelpxq'
     }
 })
 
@@ -114,7 +114,7 @@ module.exports.register = async (req, res) => {
     await newOtp.save()
     await smsGe.messages.create({
         body: `Your otp code is ${newOtp.otp}`,
-        from: '+18727135126',
+        from: '+15075961199',
         to: newOtp.phone
     }).then(message => console.log(message.sid));
     //has pass

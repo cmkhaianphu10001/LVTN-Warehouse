@@ -116,6 +116,20 @@ class MyDrawer extends StatelessWidget {
               //     MaterialPageRoute(builder: (context) => AddProduct()));
             },
           ),
+          Container(height: 1, width: size.width, color: Colors.grey),
+          ListTile(
+            leading: Icon(Icons.local_offer_outlined),
+            title: Text(
+              'Position storage',
+              style: TextStyle(
+                fontSize: 18,
+              ),
+            ),
+            onTap: () {
+              // Navigator.push(context,
+              //     MaterialPageRoute(builder: (context) => AddProduct()));
+            },
+          ),
         ],
       ),
     );
