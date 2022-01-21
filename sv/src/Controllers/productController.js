@@ -144,7 +144,9 @@ module.exports.GetProducts = async (req, res) => {
             } else if (productID != null) {
                 listProduct = await Product.findById(productID);
             } else {
-                listProduct = await Product.find();
+                listProduct = await Product.find({
+                    // productName: { $regex: 'fl', $options: 'i' }
+                });
             }
             return res.status(200).json(listProduct);
 

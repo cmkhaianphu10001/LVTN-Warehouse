@@ -5,6 +5,7 @@ const userRouter = require('./Routers/user')
 const profileRouter = require('./Routers/profile')
 const productRouter = require('./Routers/product')
 const order = require('./Routers/oder')
+const pStorage = require('./Routers/pStorage')
 
 const imageRoute = express.static('./public/upload/images')
 
@@ -15,5 +16,6 @@ app.use('/api/product', productRouter)
 app.use('/api/user', userRouter);
 app.use('/api/profile', profileRouter);
 app.use('/api/order', order);
+app.use('/api/positionStorage', pStorage);
 
 module.exports = app

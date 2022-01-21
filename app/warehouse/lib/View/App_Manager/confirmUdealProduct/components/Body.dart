@@ -48,7 +48,9 @@ class _BodyState extends State<Body> {
                 children: <Widget>[
                   Expanded(
                     flex: 1,
-                    child: Header(),
+                    child: Header(
+                      userDrawer: false,
+                    ),
                   ),
                   Expanded(
                     flex: 5,

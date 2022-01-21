@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:warehouse/View/App_Manager/positionScreen/positionScreen.dart';
 import 'package:warehouse/View/App_Manager/requestAccountList/ReqiuestAccountList.dart';
 import 'package:warehouse/View/App_Manager/undealProduct/UndealProductScreen.dart';
 import 'package:warehouse/colors.dart';
@@ -126,8 +127,10 @@ class MyDrawer extends StatelessWidget {
               ),
             ),
             onTap: () {
-              // Navigator.push(context,
-              //     MaterialPageRoute(builder: (context) => AddProduct()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => PositionStorageScreen()));
             },
           ),
         ],
