@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const _ = require('lodash');
 const JWT = require('jsonwebtoken');
 const nodeMailer = require('nodemailer');
+require('dotenv').config();
 
 const twilioSid = process.env.TWILIO_ACCOUNT_SID;
 const twilioToken = process.env.TWILIO_AUTH_TOKEN;
