@@ -112,7 +112,6 @@ class _ViewStorageState extends State<ViewStorage> {
 
 addItem() {
   log('add');
-  return;
 }
 
 removeItem() {
