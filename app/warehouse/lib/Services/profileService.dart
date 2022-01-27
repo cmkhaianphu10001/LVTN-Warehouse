@@ -100,7 +100,7 @@ class ProfileServices {
           }),
         );
         log('set image successful');
-        if (profile.image != null) {
+        if (profile.image != null && profile.image != '') {
           await Storage().deleteImage(getFullpathFromDB(profile.image));
         }
 

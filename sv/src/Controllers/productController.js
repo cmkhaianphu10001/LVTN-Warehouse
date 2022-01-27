@@ -39,7 +39,7 @@ module.exports.addNewProduct = async (req, res) => {
                 managerConfirm: req.body.managerConfirm || 0,// = 0
             });
             await newUnDealProduct.save();
-            return res.status(200).json({ '_id': newUnDealProduct._id });
+            return res.status(200).send('Completed add new Product');
         }
 
     } else {

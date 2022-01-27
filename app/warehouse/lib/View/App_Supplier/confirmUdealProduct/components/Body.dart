@@ -12,6 +12,7 @@ import 'package:warehouse/components/myInputText.dart';
 import 'package:warehouse/components/myTextView.dart';
 import 'package:warehouse/components/shortButton.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:warehouse/helper/actionToFile.dart';
 
 class Body extends StatefulWidget {
   final UndealProduct undealProduct;
@@ -149,9 +150,7 @@ class _BodyState extends State<Body> {
                                   color: Colors.white,
                                 ),
                                 child: Image.network(
-                                  domain +
-                                      'public/upload/images/' +
-                                      undealProduct.image,
+                                  getdownloadUriFromDB(undealProduct.image),
                                   fit: BoxFit.contain,
                                 ),
                               ),

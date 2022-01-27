@@ -157,12 +157,10 @@ class _BodyState extends State<Body> {
                                           var res = await ProductService()
                                               .addNewProduct(newProduct,
                                                   _imagePicked, token);
-                                          var str =
-                                              await res.stream.bytesToString();
-                                          print(str);
+
                                           if (res.statusCode == 200) {
                                             Fluttertoast.showToast(
-                                                msg: str,
+                                                msg: res.body.toString(),
                                                 toastLength: Toast.LENGTH_SHORT,
                                                 gravity: ToastGravity.BOTTOM,
                                                 timeInSecForIosWeb: 1,
@@ -173,7 +171,7 @@ class _BodyState extends State<Body> {
                                             Navigator.pop(context, true);
                                           } else {
                                             Fluttertoast.showToast(
-                                                msg: str,
+                                                msg: res.body.toString(),
                                                 toastLength: Toast.LENGTH_SHORT,
                                                 gravity: ToastGravity.BOTTOM,
                                                 timeInSecForIosWeb: 1,

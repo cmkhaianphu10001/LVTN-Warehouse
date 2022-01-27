@@ -11,6 +11,7 @@ import 'package:warehouse/components/myDialog.dart';
 import 'package:warehouse/components/myInputText.dart';
 import 'package:warehouse/components/myTextView.dart';
 import 'package:warehouse/components/shortButton.dart';
+import 'package:warehouse/helper/actionToFile.dart';
 
 class EditProductImport extends StatefulWidget {
   final User supplier;
@@ -140,9 +141,7 @@ class _EditProductImportState extends State<EditProductImport> {
                             color: Colors.white,
                           ),
                           child: Image.network(
-                            domain +
-                                'public/upload/images/' +
-                                cartItem.product.image,
+                            getdownloadUriFromDB(cartItem.product.image),
                             fit: BoxFit.contain,
                           ),
                         ),

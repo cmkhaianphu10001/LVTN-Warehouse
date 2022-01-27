@@ -4,6 +4,7 @@ import 'package:warehouse/Models/cart.dart';
 import 'package:warehouse/View/App_Manager/Header.dart';
 import 'package:warehouse/colors.dart';
 import 'package:warehouse/helper/QRhelper.dart';
+import 'package:warehouse/helper/actionToFile.dart';
 
 class ImportResult extends StatefulWidget {
   final List<dynamic> listResult;
@@ -99,15 +100,15 @@ class _ImportResultState extends State<ImportResult> {
                                                 BorderRadius.circular(10),
                                           ),
                                           child: Image.network(
-                                            domain +
-                                                'public/upload/images/' +
-                                                listItem
-                                                    .firstWhere((element) =>
-                                                        element.pId ==
-                                                        listResult[index]
-                                                            ['productID'])
-                                                    .product
-                                                    .image,
+                                            getdownloadUriFromDB(
+                                              listItem
+                                                  .firstWhere((element) =>
+                                                      element.pId ==
+                                                      listResult[index]
+                                                          ['productID'])
+                                                  .product
+                                                  .image,
+                                            ),
                                             fit: BoxFit.contain,
                                           )),
                                       Container(

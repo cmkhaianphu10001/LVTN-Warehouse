@@ -21,6 +21,7 @@ import 'package:warehouse/components/myPickDate.dart';
 import 'package:warehouse/components/myTextView.dart';
 import 'package:warehouse/components/shortButton.dart';
 import 'package:warehouse/helper/JWTconvert.dart';
+import 'package:warehouse/helper/actionToFile.dart';
 import 'package:warehouse/helper/validation.dart';
 
 import 'editProductImport/EditProductImport.dart';
@@ -208,10 +209,10 @@ class _ImportScreenState extends State<ImportScreen> {
                                                                 .circular(10),
                                                       ),
                                                       child: Image.network(
-                                                        domain +
-                                                            'public/upload/images/' +
-                                                            cart.listItem[index]
-                                                                .product.image,
+                                                        getdownloadUriFromDB(
+                                                          cart.listItem[index]
+                                                              .product.image,
+                                                        ),
                                                         fit: BoxFit.contain,
                                                       )),
                                                   Container(
