@@ -5,6 +5,7 @@ import 'package:warehouse/Services/productService.dart';
 import 'package:warehouse/colors.dart';
 import 'package:warehouse/components/loading_view.dart';
 import 'package:warehouse/helper/JWTconvert.dart';
+import 'package:warehouse/helper/actionToFile.dart';
 
 class ListProduct extends StatefulWidget {
   const ListProduct({Key key}) : super(key: key);
@@ -95,7 +96,7 @@ class ItemCart extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Image.network(
-                      domain + 'public/upload/images/' + product.image,
+                      getdownloadUriFromDB(product.image),
                       fit: BoxFit.contain,
                     )),
               ],

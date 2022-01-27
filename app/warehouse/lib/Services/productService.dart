@@ -7,6 +7,7 @@ import 'package:warehouse/Models/productModel.dart';
 import 'package:warehouse/Models/qrModel.dart';
 import 'package:warehouse/Models/undealProductModel.dart';
 import 'package:warehouse/colors.dart';
+import 'package:warehouse/helper/uploadImage.dart';
 
 class ProductService {
   var url = domain + 'api/product/';
@@ -15,10 +16,13 @@ class ProductService {
   addNewProduct(Product newProduct, File imagePicked, String token) async {
     // print(newProduct.toJson());
     // print(imagePicked);
-    var newProductf = jsonEncode(newProduct.toJson());
+
     // newProductf.image = '';
     try {
-      var res1 = await http.post(
+      String uri = await Storage().uploadImage(imagePicked, '/product_images/');
+      newProduct.image = uri;
+      var newProductf = jsonEncode(newProduct.toJson());
+      var res = await http.post(
         Uri.parse(url + 'addNewProduct'),
         body: newProductf,
         headers: {
@@ -26,21 +30,6 @@ class ProductService {
           "authorization": token,
         },
       );
-      // print(res1.statusCode.toString() + ":" + jsonDecode(res1.body)['_id']);
-
-      http.MultipartRequest request =
-          new http.MultipartRequest("POST", Uri.parse(url + 'includeImage'));
-      http.MultipartFile multipartFile =
-          await http.MultipartFile.fromPath('image', imagePicked.path);
-      request.files.add(multipartFile);
-      request.headers.addAll({
-        "content-type": "multipart/form-data",
-        "authorization": token,
-        "productid": jsonDecode(res1.body)['_id'],
-      });
-
-      var res = await request.send();
-
       // print(res.statusCode.toString());
       return res;
     } catch (e) {

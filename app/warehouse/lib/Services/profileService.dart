@@ -1,10 +1,14 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
+import 'package:firebase_storage/firebase_storage.dart' as storage;
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:warehouse/Models/userModel.dart';
 import 'package:warehouse/colors.dart';
+import 'package:warehouse/helper/actionToFile.dart';
+import 'package:warehouse/helper/uploadImage.dart';
 
 class ProfileServices {
   Dio dio = new Dio();
@@ -50,27 +54,60 @@ class ProfileServices {
     }
   }
 
-  changeAvatar(String token, File imagePicked) async {
+  // changeAvatar(String token, File imagePicked) async {
+  //   var postUri = Uri.parse(url + 'changeAvatar');
+  //   print(imagePicked);
+
+  //   try {
+  //     http.MultipartRequest request =
+  //         new http.MultipartRequest("POST", postUri);
+
+  //     http.MultipartFile multipartFile =
+  //         await http.MultipartFile.fromPath('image', imagePicked.path);
+
+  //     request.files.add(multipartFile);
+  //     request.headers.addAll({
+  //       "content-type": "multipart/form-data",
+  //       "authorization": token,
+  //     });
+
+  //     var res = await request.send();
+
+  //     print(res.stream.toString());
+  //     return res;
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
+
+  changeAvatar(String token, User profile, File imagePicked) async {
     var postUri = Uri.parse(url + 'changeAvatar');
     print(imagePicked);
 
     try {
-      http.MultipartRequest request =
-          new http.MultipartRequest("POST", postUri);
+      String uri = await Storage().uploadImage(imagePicked, '/profile_images/');
+      log(uri);
 
-      http.MultipartFile multipartFile =
-          await http.MultipartFile.fromPath('image', imagePicked.path);
+      if (uri != null) {
+        var res = await http.post(
+          postUri,
+          headers: {
+            "content-type": "application/json",
+            "authorization": token,
+          },
+          body: jsonEncode({
+            'image': uri,
+          }),
+        );
+        log('set image successful');
+        if (profile.image != null) {
+          await Storage().deleteImage(getFullpathFromDB(profile.image));
+        }
 
-      request.files.add(multipartFile);
-      request.headers.addAll({
-        "content-type": "multipart/form-data",
-        "authorization": token,
-      });
-
-      var res = await request.send();
-
-      print(res.stream.toString());
-      return res;
+        return res;
+      } else {
+        return null;
+      }
     } catch (e) {
       print(e);
     }

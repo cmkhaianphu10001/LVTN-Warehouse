@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:warehouse/Models/userModel.dart';
 import 'package:warehouse/colors.dart';
+import 'package:warehouse/helper/actionToFile.dart';
 
 class UserCard extends StatelessWidget {
   final Function onTap;
@@ -42,8 +43,7 @@ class UserCard extends StatelessWidget {
                 backgroundColor: Colors.grey[100],
                 backgroundImage: user.image == ''
                     ? AssetImage('assets/images/default-person.png')
-                    : NetworkImage(
-                        domain + 'public/upload/images/' + user.image),
+                    : NetworkImage(getdownloadUriFromDB(user.image)),
               ),
             ),
             SizedBox(

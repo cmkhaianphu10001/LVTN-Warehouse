@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:warehouse/Models/undealProductModel.dart';
@@ -8,6 +7,7 @@ import 'package:warehouse/colors.dart';
 import 'package:warehouse/components/loading_view.dart';
 
 import 'package:warehouse/helper/JWTconvert.dart';
+import 'package:warehouse/helper/actionToFile.dart';
 
 class ListProduct extends StatefulWidget {
   @override
@@ -133,7 +133,7 @@ class ItemCart extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Image.network(
-                      domain + 'public/upload/images/' + undealProduct.image,
+                      getdownloadUriFromDB(undealProduct.image),
                       fit: BoxFit.contain,
                     )),
                 undealProduct.supplierConfirm

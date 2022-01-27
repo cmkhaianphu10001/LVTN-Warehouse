@@ -29,3 +29,16 @@ Future saveAndShare({Uint8List imageFromScreenshot}) async {
   String text = 'QR from Warehouse';
   await Share.shareFiles([image.path], text: text);
 }
+
+String handleName(File file) {
+  String rs = DateTime.now().microsecondsSinceEpoch.toString() + '-image';
+  return rs;
+}
+
+String getdownloadUriFromDB(String data) {
+  return data.split("|")[0];
+}
+
+String getFullpathFromDB(String data) {
+  return data.split("|")[1];
+}

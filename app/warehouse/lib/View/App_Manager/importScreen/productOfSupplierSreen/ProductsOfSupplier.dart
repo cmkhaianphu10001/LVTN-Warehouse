@@ -8,6 +8,7 @@ import 'package:warehouse/View/App_Manager/importScreen/productImport/productImp
 import 'package:warehouse/View/App_Manager/mngHome/components/Drawer.dart';
 import 'package:warehouse/colors.dart';
 import 'package:warehouse/components/loading_view.dart';
+import 'package:warehouse/helper/actionToFile.dart';
 
 class ProductsOfSupplier extends StatefulWidget {
   final User supplier;
@@ -158,7 +159,7 @@ class ItemCart extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Image.network(
-                      domain + 'public/upload/images/' + product.image,
+                      getdownloadUriFromDB(product.image),
                       fit: BoxFit.contain,
                     )),
               ],

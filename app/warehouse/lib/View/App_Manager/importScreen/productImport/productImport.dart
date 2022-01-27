@@ -10,6 +10,7 @@ import 'package:warehouse/View/App_Manager/mngHome/components/Drawer.dart';
 import 'package:warehouse/colors.dart';
 import 'package:warehouse/components/myInputText.dart';
 import 'package:warehouse/components/shortButton.dart';
+import 'package:warehouse/helper/actionToFile.dart';
 import 'package:warehouse/helper/validation.dart';
 
 class ProductImport extends StatefulWidget {
@@ -146,7 +147,7 @@ class _ProductImportState extends State<ProductImport> {
                             color: Colors.white,
                           ),
                           child: Image.network(
-                            domain + 'public/upload/images/' + product.image,
+                            getdownloadUriFromDB(product.image),
                             fit: BoxFit.contain,
                           ),
                         ),

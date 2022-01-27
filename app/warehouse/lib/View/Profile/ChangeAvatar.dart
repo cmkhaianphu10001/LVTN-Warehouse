@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:warehouse/Models/userModel.dart';
 import 'package:warehouse/Services/profileService.dart';
 import 'package:warehouse/View/Profile/ProfleScreen.dart';
 import 'package:warehouse/colors.dart';
@@ -10,14 +12,17 @@ import 'package:warehouse/components/shortButton.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ChangeAvatar extends StatefulWidget {
-  const ChangeAvatar({Key key}) : super(key: key);
-
+  const ChangeAvatar({Key key, this.profile}) : super(key: key);
+  final User profile;
   @override
-  _ChangeAvatarState createState() => _ChangeAvatarState();
+  _ChangeAvatarState createState() => _ChangeAvatarState(profile);
 }
 
 class _ChangeAvatarState extends State<ChangeAvatar> {
+  final User profile;
   File _imagePicked;
+
+  _ChangeAvatarState(this.profile);
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -121,15 +126,28 @@ class _ChangeAvatarState extends State<ChangeAvatar> {
                             SharedPreferences preferences =
                                 await SharedPreferences.getInstance();
                             var res = await ProfileServices().changeAvatar(
-                                preferences.getString('token'), _imagePicked);
+                                preferences.getString('token'),
+                                profile,
+                                _imagePicked);
 
-                            if (res.statusCode == 200) {
-                              // print(res.message);
-                              Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ProfileScreen()),
-                                  (route) => false);
+                            if (res != null) {
+                              if (res.statusCode == 200) {
+                                // print(res.message);
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ProfileScreen()),
+                                    (route) => false);
+                              }
+                            } else {
+                              Fluttertoast.showToast(
+                                  msg: 'upload to firebase storage failed!',
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.grey.withOpacity(0.3),
+                                  textColor: Colors.black,
+                                  fontSize: 16.0);
                             }
                           },
                           text: 'Submit',

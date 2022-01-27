@@ -5,7 +5,8 @@ var storage = multer.diskStorage({
         cb(null, 'public/upload/images')
     },
     filename: function (req, file, cb) {
-        cb(null, Date.now() + '-' + file.originalname.replace(/image_picker/g, ''));
+        // cb(null, Date.now() + '-' + file.originalname.replace(/image_picker/g, ''));
+        cb(null, Date.now() + '-' + file.originalname.replaceAll('image_picker', ''));
     }
 
 })

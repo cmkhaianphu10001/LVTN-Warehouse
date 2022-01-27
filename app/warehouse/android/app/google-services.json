@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "424824585501",
+    "project_id": "lvtn-warehouse",
+    "storage_bucket": "lvtn-warehouse.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:424824585501:android:8771a3734fa24b98ed35f4",
+        "android_client_info": {
+          "package_name": "com.example.warehouse"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "424824585501-1lrhm584buaob6t183stnnppmn0k1t38.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAOmI8f5p6lrUE5oLEPe8B-jzLRidd6R0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "424824585501-1lrhm584buaob6t183stnnppmn0k1t38.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

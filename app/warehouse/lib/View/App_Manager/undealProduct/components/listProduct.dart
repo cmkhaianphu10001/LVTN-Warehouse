@@ -6,6 +6,7 @@ import 'package:warehouse/View/App_Manager/confirmUdealProduct/ConfirmUndealProd
 
 import 'package:warehouse/colors.dart';
 import 'package:warehouse/components/loading_view.dart';
+import 'package:warehouse/helper/actionToFile.dart';
 
 class ListProduct extends StatefulWidget {
   @override
@@ -127,7 +128,7 @@ class ItemCart extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Image.network(
-                      domain + 'public/upload/images/' + undealProduct.image,
+                      getdownloadUriFromDB(undealProduct.image),
                       fit: BoxFit.contain,
                     )),
                 undealProduct.managerConfirm

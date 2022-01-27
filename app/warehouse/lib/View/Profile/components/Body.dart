@@ -9,6 +9,7 @@ import 'package:warehouse/Services/profileService.dart';
 import 'package:warehouse/colors.dart';
 import 'package:warehouse/components/loading_view.dart';
 import 'package:warehouse/components/shortButton.dart';
+import 'package:warehouse/helper/actionToFile.dart';
 import 'package:warehouse/wrapper.dart';
 
 import '../ChangeAvatar.dart';
@@ -188,9 +189,9 @@ class _BodyState extends State<Body> {
                                                       ''
                                                   ? AssetImage(
                                                       'assets/images/default-person.png')
-                                                  : NetworkImage(domain +
-                                                      'public/upload/images/' +
-                                                      profile.image),
+                                                  : NetworkImage(
+                                                      getdownloadUriFromDB(
+                                                          profile.image)),
                                             ),
                                           ),
                                         ),
@@ -213,7 +214,9 @@ class _BodyState extends State<Body> {
                                                     context,
                                                     MaterialPageRoute(
                                                         builder: (context) =>
-                                                            ChangeAvatar()));
+                                                            ChangeAvatar(
+                                                              profile: profile,
+                                                            )));
                                               },
                                             ),
                                           ),

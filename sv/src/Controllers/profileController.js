@@ -42,7 +42,45 @@ module.exports.getProfile = async (req, res) => {
 
 
 
-// change Avatar
+// // change Avatar
+// module.exports.changeAvatar = async (req, res) => {
+
+//     // console.log(req);
+//     // console.log(req.headers['authorization']);
+//     var token = req.headers['authorization'];
+//     if (JWT.verify(token, process.env.JWTSecret)) {
+//         var decodeToken = JWT.decode(token, process.env.JWTSecret);
+//         var user = await User.findOne({
+//             email: decodeToken.email,
+//         });
+//         if (user == null) {
+//             return res.status(404).send('Authenticate failed!')
+//         } else {
+
+//             //storage images
+//             multerHandle.upload(req, res, function (err) {
+//                 if (err instanceof require('multer').MulterError) {
+//                     return res.status(400).send('A Multer error occurred when uploading..')
+//                 } else if (err) {
+//                     return res.status(400).send('A unknown error occurred when uploading..' + err)
+//                 } else {
+
+//                     if (user.image != null) {
+//                         fs.unlink('public/upload/images/' + user.image, function (err) {
+//                             console.log(err);
+//                         });
+//                     }
+//                     user.image = req.file.filename;
+//                     user.save();
+//                     return res.status(200).send('image updated')
+//                 }
+//             });
+//         }
+//     } else {
+//         return res.status(400).send("Wrong token, Please login")
+//     }
+// }
+
 module.exports.changeAvatar = async (req, res) => {
 
     // console.log(req);
@@ -58,23 +96,10 @@ module.exports.changeAvatar = async (req, res) => {
         } else {
 
             //storage images
-            multerHandle.upload(req, res, function (err) {
-                if (err instanceof require('multer').MulterError) {
-                    return res.status(400).send('A Multer error occurred when uploading..')
-                } else if (err) {
-                    return res.status(400).send('A unknown error occurred when uploading..' + err)
-                } else {
-
-                    if (user.image != null) {
-                        fs.unlink('public/upload/images/' + user.image, function (err) {
-                            console.log(err);
-                        });
-                    }
-                    user.image = req.file.filename;
-                    user.save();
-                    return res.status(200).send('image updated')
-                }
-            });
+            console.log(req.body.image)
+            user.image = req.body.image;
+            user.save();
+            return res.status(200).send('Change avatar successful')
         }
     } else {
         return res.status(400).send("Wrong token, Please login")
