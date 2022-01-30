@@ -144,12 +144,22 @@ module.exports.SetItem = async (req, res) => {
                 });
                 if (findProduct != null && findPosition != null) {
                     // console.log(findPosition.positionName);
-                    findPosition.productID = findProduct._id;
-                    findPosition.image = findProduct.image;
-                    findPosition.productName = findProduct.productName
+                    if (findProduct.stored != null) {
+                        return res.status(400).send('Stored failed, this product was stored')
+                    } else if (findPosition.productID != null) {
+                        return res.status(400).send("Stored failed, this storage wasn't empty")
+                    } else {
+                        findPosition.productID = findProduct._id;
+                        findPosition.image = findProduct.image;
+                        findPosition.productName = findProduct.productName;
 
-                    findPosition.save();
-                    return res.status(200).send('Set Product to position successful!')
+                        findProduct.stored = findPosition.positionName;
+
+                        findPosition.save();
+                        findProduct.save();
+                        return res.status(200).send('Set Product to position successful!')
+                    }
+
                 } else {
                     return res.status(400).send('Product or position wrong!')
                 }
@@ -177,13 +187,19 @@ module.exports.RemoveItem = async (req, res) => {
                 var findPosition = await PositionStorage.findOne({
                     positionName: req.body.positionName,
                 });
+
                 if (findPosition != null) {
                     // console.log(findPosition.positionName);
+                    var findProduct = await Product.findById(findPosition.productID);
                     findPosition.productID = null;
                     findPosition.image = null;
                     findPosition.productName = null;
 
+                    findProduct.stored = null;
+
+
                     findPosition.save();
+                    findProduct.save();
                     return res.status(200).send('Remove Product to position successful!')
                 } else {
                     return res.status(400).send('Position wrong!')

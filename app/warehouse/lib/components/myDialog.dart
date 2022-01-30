@@ -6,7 +6,6 @@ import 'package:warehouse/components/LongButton.dart';
 import 'package:warehouse/components/myInputText.dart';
 import 'package:warehouse/helper/validation.dart';
 
-
 class ConfirmDialog extends StatelessWidget {
   final Function acceptFunc;
   // final Function cancelFunc;
@@ -22,7 +21,7 @@ class ConfirmDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text('Delete Item?'),
-      content: Text('Delete $nameOfItem in your list product'),
+      content: Text('Delete $nameOfItem in your list'),
       actions: [
         FlatButton(
           textColor: Color(0xFF6200EE),

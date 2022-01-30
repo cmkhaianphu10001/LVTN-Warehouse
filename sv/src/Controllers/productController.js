@@ -220,6 +220,7 @@ module.exports.ConfirmUndealProduct = async (req, res) => {
                         ratePrice: unDealProduct.ratePrice || null,//nullable
                         image: unDealProduct.image || null,//nullable
                         description: unDealProduct.description || '',//nullable
+                        stored: null,//nullable
                     });
                     console.log('5')
 
@@ -232,9 +233,6 @@ module.exports.ConfirmUndealProduct = async (req, res) => {
 
                 }
             } else {
-                fs.unlink('public/upload/images/' + unDealProduct.image, function (err) {
-                    console.log(err);
-                });
                 await UnDealProduct.deleteOne({
                     _id: req.body.undealProductID,
                 })

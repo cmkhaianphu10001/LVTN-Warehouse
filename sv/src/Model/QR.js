@@ -4,8 +4,10 @@ const QRSchema = new Schema({
     productID: { type: String, },
     importDate: { type: Date, },
     managerIDImport: { type: String },
+    importID: { type: String },
     //nullable
     cusID: { type: String, },
+    exportID: { type: String },
     exportDate: { type: Date, },
     managerIDExport: { type: String },
     exportPrice: { type: String },

@@ -5,10 +5,12 @@ import 'package:warehouse/colors.dart';
 class Header extends StatelessWidget {
   final bool userDrawer;
   final String title;
+  final bool preLoad;
   const Header({
     Key key,
     this.title,
     this.userDrawer = true,
+    this.preLoad = false,
   }) : super(key: key);
 
   @override
@@ -34,7 +36,7 @@ class Header extends StatelessWidget {
               if (userDrawer) {
                 Scaffold.of(context).openDrawer();
               } else {
-                Navigator.pop(context);
+                preLoad ? Navigator.pop(context, true) : Navigator.pop(context);
               }
             },
             child: Container(

@@ -322,7 +322,11 @@ class _BodyState extends State<Body> {
                           child: ShortButton(
                             text: 'BACK',
                             onclick: () {
-                              Navigator.pop(context);
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Wrapper()),
+                                  (route) => false);
                             },
                           ),
                         ),

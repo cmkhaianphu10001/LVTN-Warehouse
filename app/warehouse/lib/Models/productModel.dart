@@ -8,6 +8,7 @@ class Product {
   double ratePrice;
   String image;
   String description;
+  String stored;
 
   Product({
     this.id,
@@ -19,6 +20,7 @@ class Product {
     this.ratePrice,
     this.image = '',
     this.description = '',
+    this.stored,
   });
 
   Product.fromJson(Map<String, dynamic> json)
@@ -34,7 +36,8 @@ class Product {
             : 1,
         importPrice = json['importPrice'] != null
             ? double.parse(json['importPrice'].toString())
-            : 0;
+            : 0,
+        stored = json['stored'] != null ? json['stored'].toString() : null;
 
   Map<String, dynamic> toJson() => {
         '_id': id,
@@ -46,5 +49,6 @@ class Product {
         'description': description,
         'image': image,
         'ratePrice': ratePrice,
+        'stored': stored,
       };
 }

@@ -10,6 +10,7 @@ const productSchema = new Schema({
     image: { type: String },
     description: { type: String, },
     // comment: [{ type: String }],
+    stored: { type: String, },
 },
     {
         timestamps: true
