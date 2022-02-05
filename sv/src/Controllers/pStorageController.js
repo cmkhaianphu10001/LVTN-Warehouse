@@ -12,6 +12,7 @@ const { User } = require('../Model/user');
 module.exports.GetPosition = async (req, res) => {
     console.log('GetPosition')
     var token = req.headers['authorization'];
+    var positionName = req.headers['positionname'];
     if (JWT.verify(token, process.env.JWTSecret)) {
         var decodeToken = JWT.decode(token, process.env.JWTSecret);
         var user = await User.findOne({
@@ -19,8 +20,15 @@ module.exports.GetPosition = async (req, res) => {
         });
         if (user != null || user.role == 'manager') {
             try {
-                var listPosition = await PositionStorage.find();
-                return res.status(200).json(listPosition);
+                if (positionName != null) {
+                    var listPosition = await PositionStorage.findOne({
+                        positionName: positionName,
+                    });
+                    return res.status(200).json(listPosition);
+                } else {
+                    var listPosition = await PositionStorage.find();
+                    return res.status(200).json(listPosition);
+                }
             } catch (error) {
                 return res.status(400).send(error);
             }
@@ -100,10 +108,15 @@ module.exports.DeletePosition = async (req, res) => {
             try {
                 var findPosition = await PositionStorage.findOne({ positionName: req.body.positionName });
                 if (findPosition != null) {
-                    await PositionStorage.findOneAndRemove({
-                        positionName: req.body.positionName,
-                    });
-                    return res.status(200).send('Delete position successfull!');
+                    if (findPosition.productID == null) {
+                        await PositionStorage.findOneAndRemove({
+                            positionName: req.body.positionName,
+                        });
+                        return res.status(200).send('Delete position successfull!');
+                    } else {
+                        return res.status(400).send('Delete failed. This Storage already stored item.');
+                    }
+
                 } else {
                     return res.status(400).send(req.body.positionName + " doesn't exists")
                 }

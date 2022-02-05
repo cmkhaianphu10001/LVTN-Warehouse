@@ -8,6 +8,7 @@ import 'package:warehouse/Services/positionService.dart';
 import 'package:warehouse/View/App_Manager/Header.dart';
 import 'package:warehouse/View/App_Manager/mngHome/components/Drawer.dart';
 import 'package:warehouse/View/App_Manager/positionScreen/ListProductUnStored/ListProductUnStored.dart';
+import 'package:warehouse/View/App_Manager/positionScreen/SetItemByQR/SetItemByQRScreen.dart';
 import 'package:warehouse/colors.dart';
 import 'package:warehouse/components/loading_view.dart';
 import 'package:warehouse/components/myDialog.dart';
@@ -55,22 +56,30 @@ class _ViewStorageState extends State<ViewStorage> {
               drawer: MyDrawer(),
               floatingActionButton: Stack(
                 children: <Widget>[
+                  position.productID == null
+                      ? Positioned(
+                          bottom: 0,
+                          right: 70,
+                          child: FloatingActionButton(
+                            heroTag: 'scan',
+                            backgroundColor: my_org,
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => QRViewPosition(
+                                            position: position,
+                                          ))).then((value) => load());
+                            },
+                            child: Icon(Icons.qr_code_scanner),
+                          ),
+                        )
+                      : Positioned(
+                          child: Container(),
+                        ),
                   Positioned(
+                    right: 0,
                     bottom: 0,
-                    right: 0,
-                    child: FloatingActionButton(
-                      heroTag: 'scan',
-                      backgroundColor: my_org,
-                      onPressed: () {
-                        load();
-                        log('load');
-                      },
-                      child: Icon(Icons.qr_code_scanner),
-                    ),
-                  ),
-                  Positioned(
-                    right: 0,
-                    bottom: 70,
                     child: FloatingActionButton(
                         heroTag: 'del',
                         onPressed: () async {

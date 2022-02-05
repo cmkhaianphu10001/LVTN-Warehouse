@@ -90,3 +90,12 @@ myToast(toastText) {
       textColor: Colors.black,
       fontSize: 16.0);
 }
+
+handleQRcode(String resultCode) {
+  List<String> results = resultCode.split('|').toList();
+  if (results[0] != 'Warehouse') {
+    return null;
+  } else {
+    return results[1];
+  }
+}

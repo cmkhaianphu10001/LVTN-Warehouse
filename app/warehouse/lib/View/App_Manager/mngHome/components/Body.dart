@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:warehouse/View/App_Manager/Header.dart';
+import 'package:warehouse/View/App_Manager/ProductsScreen/ProductsScreen.dart';
 import 'package:warehouse/View/App_Manager/exportScreen/ExportScreen.dart';
 import 'package:warehouse/View/App_Manager/importScreen/ImportScreen.dart';
 import 'package:warehouse/helper/my_icons_icons.dart';
@@ -132,7 +133,14 @@ class _BodyState extends State<Body> {
                           id: 3,
                           focus: focus,
                           label: 'Product',
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ProductsScreen(),
+                              ),
+                            );
+                          },
                           onTapDown: (v) async {
                             setState(() {
                               focus = 3;

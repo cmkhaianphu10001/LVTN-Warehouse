@@ -8,7 +8,7 @@ const { register,
     confirmNewAccount,
     GetUncheckUser } = require('../Controllers/authController');
 
-const { GetSupplier, } = require('../Controllers/userController');
+const { GetSupplier, GetManager, GetUsers } = require('../Controllers/userController');
 
 //authentication
 router.route('/login').post(login)
@@ -19,6 +19,8 @@ router.route('/register/confirmNewAccount').post(confirmNewAccount)
 router.route('/register/getUncheckUser').get(GetUncheckUser)
 
 //User data
-router.route('/getSupplier').get(GetSupplier)
+router.route('/getSupplier').get(GetSupplier);
+router.route('/getManager').get(GetManager);
+router.route('/getusers').get(GetUsers);
 
 module.exports = router;

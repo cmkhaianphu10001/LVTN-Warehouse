@@ -2,6 +2,7 @@ const JWT = require('jsonwebtoken');
 const { User } = require('../Model/user');
 const { UnDealProduct } = require('../Model/unDealProduct');
 const { Product } = require('../Model/product');
+const { QR } = require('../Model/QR');
 const multerHandle = require('./multerHandle');
 const fs = require('fs');
 
@@ -47,51 +48,6 @@ module.exports.addNewProduct = async (req, res) => {
     }
 }
 
-// module.exports.IncludeImage = async (req, res) => {
-//     // console.log(req.headers);
-//     var token = req.headers['authorization'];
-//     var productID = req.headers['productid'];
-//     if (JWT.verify(token, process.env.JWTSecret)) {
-//         var decodeToken = JWT.decode(token, process.env.JWTSecret);
-//         var user = await User.findOne({
-//             email: decodeToken.email,
-//         });
-//         if (user == null) {
-//             return res.status(404).send('Authenticate failed!')
-//         } else {
-//             var unDealProduct = await UnDealProduct.findOne({
-//                 _id: productID,
-//             })
-//             if (unDealProduct == null) {
-//                 return res.status(404).send('failed when add new product');
-//             } else {
-//                 // storage images
-//                 multerHandle.upload(req, res, function (err) {
-//                     if (err instanceof require('multer').MulterError) {
-//                         return res.status(400).send('A Multer error occurred when uploading..')
-//                     } else if (err) {
-//                         return res.status(400).send('A unknown error occurred when uploading..' + err)
-//                     } else {
-
-//                         if (unDealProduct.image != null) {
-//                             fs.unlink('public/upload/images/' + user.image, function (err) {
-//                                 console.log(err);
-//                             });
-//                         }
-//                         unDealProduct.image = req.file.filename;
-//                         unDealProduct.save();
-//                         // console.log('ok');
-//                         return res.status(200).send('Complete add new product!')
-//                     }
-//                 });
-//             }
-
-//         }
-//     } else {
-//         return res.status(400).send("Wrong token, Please login")
-//     }
-// }
-
 //get undeal product
 module.exports.GetUndealProducts = async (req, res) => {
     console.log('getundealproducts')
@@ -129,6 +85,7 @@ module.exports.GetProducts = async (req, res) => {
     console.log('getproducts')
     var token = req.headers['authorization'];
     var supID = req.headers['supid'];
+    var qrID = req.headers['qrid'];
     var productID = req.headers['productid'];
     if (JWT.verify(token, process.env.JWTSecret)) {
         var decodeToken = JWT.decode(token, process.env.JWTSecret);
@@ -143,6 +100,12 @@ module.exports.GetProducts = async (req, res) => {
                 })
             } else if (productID != null) {
                 listProduct = await Product.findById(productID);
+            } else if (qrID != null) {
+                var qrfound = await QR.findById(qrID);
+                if (qrfound == null) {
+                    return res.status(400).send("Can't found product.");
+                }
+                listProduct = await Product.findById(qrfound.productID);
             } else {
                 listProduct = await Product.find({
                     // productName: { $regex: 'fl', $options: 'i' }
@@ -250,4 +213,3 @@ module.exports.ConfirmUndealProduct = async (req, res) => {
     }
 
 }
-

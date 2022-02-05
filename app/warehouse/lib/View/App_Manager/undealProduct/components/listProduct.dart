@@ -68,7 +68,7 @@ class _ListProductState extends State<ListProduct> {
                         crossAxisSpacing: 10,
                         mainAxisSpacing: 10,
                       ),
-                      itemBuilder: (context, index) => ItemCart(
+                      itemBuilder: (context, index) => ItemCard(
                         onTap: () {
                           Navigator.of(context)
                               .push(
@@ -92,11 +92,11 @@ class _ListProductState extends State<ListProduct> {
   }
 }
 
-class ItemCart extends StatelessWidget {
+class ItemCard extends StatelessWidget {
   final UndealProduct undealProduct;
   final Function onTap;
 
-  const ItemCart({
+  const ItemCard({
     Key key,
     this.onTap,
     this.undealProduct,

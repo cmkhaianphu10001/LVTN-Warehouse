@@ -4,7 +4,8 @@ const router = express.Router();
 const { addNewProduct,
     GetUndealProducts,
     GetProducts,
-    ConfirmUndealProduct, } = require('../Controllers/productController');
+    ConfirmUndealProduct,
+} = require('../Controllers/productController');
 
 const {
     ImportProducts,
@@ -16,7 +17,7 @@ router.route('/addNewProduct').post(addNewProduct);
 router.route('/getUndealProducts').get(GetUndealProducts);
 router.route('/getProducts').get(GetProducts);
 router.route('/confirmUndealProduct').post(ConfirmUndealProduct);
-// router.route('/register/confirmNewAccount').post(confirmNewAccount)
+// router.route('/getQRsByProductID').get(GetQRsByProductID);
 
 
 //import

@@ -78,7 +78,9 @@ class _PositionStorageScreenState extends State<PositionStorageScreen> {
                             itemCount: positions.length,
                             itemBuilder: (BuildContext ctx, index) {
                               return Card(
-                                color: Colors.grey[200],
+                                color: positions[index].productID != null
+                                    ? Colors.grey[200]
+                                    : Colors.grey[50],
                                 child: InkWell(
                                     onTap: () {
                                       Navigator.push(
@@ -86,8 +88,7 @@ class _PositionStorageScreenState extends State<PositionStorageScreen> {
                                           MaterialPageRoute(
                                               builder: (context) => ViewStorage(
                                                     position: positions[index],
-                                                  ))).then(
-                                          (val) => val ? load() : null);
+                                                  ))).then((val) => load());
                                     },
                                     child: Container(
                                       child: Column(

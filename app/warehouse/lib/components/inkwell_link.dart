@@ -17,10 +17,10 @@ class InkWellLink extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
         Text(
-          tag,
+          tag + ' ',
           style: TextStyle(
             color: Colors.black,
-            fontSize: 13,
+            fontSize: 17,
           ),
         ),
         InkWell(

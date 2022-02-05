@@ -5,7 +5,6 @@ import 'package:warehouse/Models/position.dart';
 import 'package:warehouse/Models/productModel.dart';
 import 'package:warehouse/Services/productService.dart';
 import 'package:warehouse/colors.dart';
-import 'package:warehouse/helper/Utils.dart';
 
 class PositionService {
   var url = domain + 'api/positionstorage/';
@@ -22,9 +21,27 @@ class PositionService {
       List<Position> positions = (jsonDecode(res.body) as List)
           .map((e) => Position.fromJson(e))
           .toList();
-      log(positions.toString());
+      // log(positions.toString());
       positions.sort((a, b) =>
           a.positionName.toLowerCase().compareTo(b.positionName.toLowerCase()));
+      return positions;
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+
+  getPositionbyName(String token, String positionName) async {
+    try {
+      var res = await http.get(
+        Uri.parse(url + 'getposition'),
+        headers: {
+          "content-type": "application/json",
+          "authorization": token,
+          "positionname": positionName,
+        },
+      );
+      Position positions = Position.fromJson(jsonDecode(res.body));
+
       return positions;
     } catch (e) {
       log(e.toString());
@@ -42,7 +59,7 @@ class PositionService {
             "description": description,
             "positionName": positionName,
           }));
-      log(res.statusCode.toString());
+      // log(res.statusCode.toString());
       return res;
     } catch (e) {
       log(e.toString());
@@ -59,7 +76,7 @@ class PositionService {
           body: jsonEncode({
             "positionName": positionName,
           }));
-      log(res.statusCode.toString());
+      // log(res.statusCode.toString());
       return res;
     } catch (e) {
       log(e.toString());
@@ -84,7 +101,7 @@ class PositionService {
             "positionName": positionName,
             "productID": productID,
           }));
-      log(res.statusCode.toString());
+      // log(res.statusCode.toString());
       return res;
     } catch (e) {
       log(e.toString());
@@ -101,7 +118,7 @@ class PositionService {
           body: jsonEncode({
             "positionName": positionName,
           }));
-      log(res.statusCode.toString());
+      // log(res.statusCode.toString());
       return res;
     } catch (e) {
       log(e.toString());

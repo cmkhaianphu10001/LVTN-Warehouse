@@ -7,6 +7,7 @@ import 'package:warehouse/Models/productModel.dart';
 import 'package:warehouse/Models/qrModel.dart';
 import 'package:warehouse/Models/undealProductModel.dart';
 import 'package:warehouse/colors.dart';
+import 'package:warehouse/helper/Utils.dart';
 import 'package:warehouse/helper/uploadImage.dart';
 
 class ProductService {
@@ -98,6 +99,8 @@ class ProductService {
           .map((e) => Product.fromJson(e))
           .toList();
       print(product.length);
+      product.sort((a, b) =>
+          a.productName.toLowerCase().compareTo(b.productName.toLowerCase()));
       return product;
     } catch (e) {
       print('err : ' + e.toString());
@@ -135,6 +138,28 @@ class ProductService {
           "productID": productID,
         },
       );
+      Product product = Product.fromJson(jsonDecode(res.body));
+      print('product name : ' + product.productName.toString());
+      return product;
+    } catch (e) {
+      log(e);
+    }
+  }
+
+  getProductByQRID(String token, String qrID) async {
+    try {
+      var res = await http.get(
+        Uri.parse(url + 'getProducts'),
+        headers: {
+          "content-type": "application/json",
+          "authorization": token,
+          "qrid": qrID,
+        },
+      );
+      if (res.statusCode == 400) {
+        return new Product(id: null, productName: res.body);
+      }
+
       Product product = Product.fromJson(jsonDecode(res.body));
       print('product name : ' + product.productName.toString());
       return product;
@@ -210,6 +235,28 @@ class ProductService {
       QRModel result = QRModel.fromJson(jsonDecode(res.body));
 
       return result;
+    } catch (e) {
+      log(e);
+    }
+  }
+
+  getQRsByProductID(String token, String productID) async {
+    try {
+      var res = await http.get(
+        Uri.parse(url + 'getQRs'),
+        headers: {
+          "content-type": "application/json",
+          "authorization": token,
+          "productid": productID,
+        },
+      );
+      List<QRModel> qRs = (jsonDecode(res.body) as List)
+          .map((e) => QRModel.fromJson(e))
+          .toList();
+
+      qRs.sort((a, b) => a.importDate.compareTo(b.importDate));
+      qRs = List.from(qRs.reversed);
+      return qRs;
     } catch (e) {
       log(e);
     }

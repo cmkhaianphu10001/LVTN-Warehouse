@@ -31,26 +31,16 @@ class Header extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          GestureDetector(
-            onTap: () {
+          IconButton(
+            onPressed: () {
               if (userDrawer) {
                 Scaffold.of(context).openDrawer();
               } else {
                 preLoad ? Navigator.pop(context, true) : Navigator.pop(context);
               }
             },
-            child: Container(
-              decoration: BoxDecoration(
-                // color: my_org,
-                borderRadius: BorderRadius.circular(50),
-              ),
-              height: 50,
-              width: 50,
-              child: Icon(
-                userDrawer == null || userDrawer
-                    ? Icons.list
-                    : Icons.arrow_back,
-              ),
+            icon: Icon(
+              userDrawer == null || userDrawer ? Icons.list : Icons.arrow_back,
             ),
           ),
           Container(
@@ -64,14 +54,16 @@ class Header extends StatelessWidget {
             ),
           ),
           Container(
-            height: 50,
-            width: 50,
             decoration: BoxDecoration(
-              color: Color(0xffffe3c0),
-              borderRadius: BorderRadius.circular(25),
+              color: my_org_30,
+              borderRadius: BorderRadius.circular(50),
             ),
             child: IconButton(
-              icon: Icon(Icons.person_outline),
+              icon: Icon(
+                Icons.person_pin_circle_rounded,
+                color: Colors.black,
+                size: 30,
+              ),
               onPressed: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => ProfileScreen()));

@@ -111,6 +111,16 @@ class ProductUnstoredDetails extends StatelessWidget {
                                     ),
                                   ),
                                   SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    "Qty: ${product.quantity}",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontStyle: FontStyle.italic,
+                                    ),
+                                  ),
+                                  SizedBox(
                                     height: 20,
                                   ),
                                   Text(

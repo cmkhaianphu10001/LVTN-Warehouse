@@ -182,7 +182,7 @@ class _QRDialogState extends State<QRDialog> {
                 Container(
                   width: size.width * 0.3,
                   child: Text(
-                    "ImportDate: \n${qr.impotDate.day} - ${qr.impotDate.month} - ${qr.impotDate.year}",
+                    "ImportDate: \n${qr.importDate.day} - ${qr.importDate.month} - ${qr.importDate.year}",
                     style: TextStyle(
                       color: Colors.black,
                     ),

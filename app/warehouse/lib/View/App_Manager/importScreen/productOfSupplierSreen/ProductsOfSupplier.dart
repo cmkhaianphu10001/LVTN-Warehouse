@@ -94,7 +94,7 @@ class _ProductsOfSupplierState extends State<ProductsOfSupplier> {
                                     crossAxisSpacing: 10,
                                     mainAxisSpacing: 10,
                                   ),
-                                  itemBuilder: (context, index) => ItemCart(
+                                  itemBuilder: (context, index) => ItemCard(
                                     product: snapshot.data[index],
                                     onTap: () {
                                       Navigator.push(
@@ -123,11 +123,11 @@ class _ProductsOfSupplierState extends State<ProductsOfSupplier> {
   }
 }
 
-class ItemCart extends StatelessWidget {
+class ItemCard extends StatelessWidget {
   final Product product;
   final Function onTap;
 
-  const ItemCart({
+  const ItemCard({
     Key key,
     this.onTap,
     this.product,

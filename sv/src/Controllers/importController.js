@@ -37,6 +37,7 @@ module.exports.ImportProducts = async (req, res) => {
         if (user != null && user.role == 'manager') {
             try {
                 console.log('import product');
+                console.log(req.body);
                 for (const e of req.body.listItem) {
                     var product = await Product.findById(e.productID);
                     for (let index = 0; index < e.quantity; index++) {
@@ -76,6 +77,7 @@ module.exports.ImportProducts = async (req, res) => {
 //
 
 module.exports.GetQRs = async (req, res) => {
+    console.log('getQRs')
     var token = req.headers['authorization'];
     var productID = req.headers['productid'];
     if (JWT.verify(token, process.env.JWTSecret)) {
@@ -115,7 +117,7 @@ module.exports.GetQRbyID = async (req, res) => {
         var user = await User.findOne({
             email: decodeToken.email,
         });
-        if (user != null && user.role == 'manager') {
+        if (user != null) {
             try {
                 const qr = await QR.findById(qrID);
                 return res.status(200).json(qr);

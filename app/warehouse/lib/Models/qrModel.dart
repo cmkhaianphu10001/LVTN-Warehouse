@@ -1,7 +1,7 @@
 class QRModel {
   String id;
   String productID;
-  DateTime impotDate;
+  DateTime importDate;
   String managerIDImport;
   String cusID;
   DateTime exportDate;
@@ -12,7 +12,7 @@ class QRModel {
   QRModel({
     this.id,
     this.productID,
-    this.impotDate,
+    this.importDate,
     this.managerIDImport,
     this.cusID,
     this.exportDate,
@@ -24,8 +24,8 @@ class QRModel {
   QRModel.fromJson(Map<String, dynamic> json)
       : id = json['_id'],
         productID = json['productID'] ?? '',
-        impotDate = json['impotDate'] != null
-            ? DateTime.parse(json['impotDate'])
+        importDate = json['importDate'] != null
+            ? DateTime.parse(json['importDate'])
             : DateTime.now(),
         managerIDImport = json['managerIDImport'] ?? 0,
         cusID = json['cusID'] ?? null,
@@ -41,7 +41,7 @@ class QRModel {
   Map<String, dynamic> toJson() => {
         '_id': id,
         'productID': productID,
-        'impotDate': impotDate,
+        'impotDate': importDate,
         'managerIDImport': managerIDImport,
         'cusID': cusID,
         'exportDate': exportDate,
