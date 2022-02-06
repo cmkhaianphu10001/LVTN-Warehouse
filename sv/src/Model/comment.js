@@ -2,9 +2,11 @@ const { Schema, model } = require('mongoose');
 
 const commentSchema = new Schema({
     productID: { type: String },
-    cusID: { type: String, },
+    userID: { type: String, },
+    userName: { type: String },
+    userImage: { type: String },
     content: { type: String, },
-    rateStar: { type: Number, }
+    replyTo: { type: String, }
 },
     {
         timestamps: true

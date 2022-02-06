@@ -140,64 +140,85 @@ class _QRDialogState extends State<QRDialog> {
     Product product,
   }) =>
       Container(
-        padding: EdgeInsets.all(10),
+        // padding: EdgeInsets.all(10),
         color: Colors.white,
         height: size.height * 0.55,
         width: size.width * 0.8,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            QrImage(
-              data: qRkey + qr.id,
-              size: size.width * 0.7,
+            Container(
+              decoration: BoxDecoration(border: Border.all()),
+              child: QrImage(
+                data: qRkey + qr.id,
+              ),
             ),
             SizedBox(
-                // height: size.height * 0.05,
-                ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Container(
-                  width: size.width * 0.3,
-                  child: Text(
-                    "QrID: ${qr.id}",
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-                Container(
-                  width: size.width * 0.3,
-                  child: Text(
-                    "ProductID: ${product.id}",
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-              ],
+              height: 10,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Container(
-                  width: size.width * 0.3,
-                  child: Text(
-                    "ImportDate: \n${qr.importDate.day} - ${qr.importDate.month} - ${qr.importDate.year}",
-                    style: TextStyle(
-                      color: Colors.black,
+            Expanded(
+              flex: 1,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Expanded(
+                    flex: 1,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          // width: size.width * 0.3,
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: Text(
+                            "QrID: ${qr.id}",
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          // width: size.width * 0.3,
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: Text(
+                            "ImportDate: \n${qr.importDate.day} - ${qr.importDate.month} - ${qr.importDate.year}",
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-                Container(
-                  width: size.width * 0.3,
-                  child: Text(
-                    "Product Name: \n${product.productName}",
-                    style: TextStyle(
-                      color: Colors.black,
+                  Expanded(
+                    flex: 1,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          // width: size.width * 0.3,
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: Text(
+                            "ProductID: ${product.id}",
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          // width: size.width * 0.3,
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: Text(
+                            "Product Name: \n${product.productName}",
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),

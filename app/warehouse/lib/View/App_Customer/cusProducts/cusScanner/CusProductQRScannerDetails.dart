@@ -8,19 +8,17 @@ import 'package:warehouse/Models/productModel.dart';
 import 'package:warehouse/Models/qrModel.dart';
 import 'package:warehouse/Models/userModel.dart';
 import 'package:warehouse/Services/commentService.dart';
-import 'package:warehouse/Services/positionService.dart';
-import 'package:warehouse/View/App_Manager/Header.dart';
-import 'package:warehouse/View/App_Manager/ProductsScreen/QRList/QRListScreen.dart';
-import 'package:warehouse/View/App_Manager/mngHome/components/Drawer.dart';
-import 'package:warehouse/View/App_Manager/positionScreen/viewStorage/viewStorage.dart';
+import 'package:warehouse/Services/productService.dart';
+import 'package:warehouse/View/App_Customer/customer_header.dart';
+
 import 'package:warehouse/colors.dart';
 import 'package:warehouse/components/inkwell_link.dart';
 import 'package:warehouse/components/loading_view.dart';
 import 'package:warehouse/helper/QRhelper.dart';
 import 'package:warehouse/helper/actionToFile.dart';
 
-class ProductDetailsWithQR extends StatefulWidget {
-  const ProductDetailsWithQR({
+class CusProductDetailsWithQR extends StatefulWidget {
+  const CusProductDetailsWithQR({
     Key key,
     @required this.product,
     @required this.qrModel,
@@ -31,22 +29,29 @@ class ProductDetailsWithQR extends StatefulWidget {
   final List<User> users;
 
   @override
-  _ProductDetailsWithQRState createState() =>
-      _ProductDetailsWithQRState(product, qrModel, users);
+  _CusProductDetailsWithQRState createState() =>
+      _CusProductDetailsWithQRState(product, qrModel, users);
 }
 
-class _ProductDetailsWithQRState extends State<ProductDetailsWithQR> {
+class _CusProductDetailsWithQRState extends State<CusProductDetailsWithQR> {
   final Product product;
   final QRModel qrModel;
   final List<User> users;
   Position position;
 
-  _ProductDetailsWithQRState(this.product, this.qrModel, this.users);
+  _CusProductDetailsWithQRState(this.product, this.qrModel, this.users);
 
   String choiceRep = '';
   TextEditingController controller1 = TextEditingController();
   TextEditingController controller2 = TextEditingController();
+
   bool load = false;
+
+  Future getQRs(String productID) async {
+    SharedPreferences pre = await SharedPreferences.getInstance();
+    return await ProductService()
+        .getQRsByProductID(pre.getString('token'), productID);
+  }
 
   Future getComments(String productID) async {
     return await CommentService().getCommentsOfProduct(productID);
@@ -56,16 +61,12 @@ class _ProductDetailsWithQRState extends State<ProductDetailsWithQR> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      drawer: MyDrawer(),
       body: Container(
         child: Column(
           children: <Widget>[
             Expanded(
               flex: 1,
-              child: Header(
-                title: 'Product',
-                userDrawer: false,
-              ),
+              child: Header(),
             ),
             Expanded(
               flex: 5,
@@ -126,17 +127,7 @@ class _ProductDetailsWithQRState extends State<ProductDetailsWithQR> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Text(
-                                      "current Price: \$${product.importPrice}",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontStyle: FontStyle.italic,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text(
-                                      "Rate Price: ${product.ratePrice}",
+                                      "Price: \$${product.importPrice * product.ratePrice}",
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontStyle: FontStyle.italic,
@@ -156,56 +147,36 @@ class _ProductDetailsWithQRState extends State<ProductDetailsWithQR> {
                                             fontStyle: FontStyle.italic,
                                           ),
                                         ),
-                                        IconButton(
-                                          onPressed: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    QRListScreen(
-                                                  product: product,
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                          icon: Icon(Icons.next_plan),
-                                          color: my_org,
-                                        )
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        FutureBuilder(
+                                            future: getQRs(product.id),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.data != null) {
+                                                List<QRModel> qrs =
+                                                    snapshot.data;
+                                                return Text(
+                                                  "Sold: ${qrs.where((element) => element.cusID != null).toList().length}",
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontStyle: FontStyle.italic,
+                                                  ),
+                                                );
+                                              } else {
+                                                return MyLoading();
+                                              }
+                                            }),
                                       ],
                                     ),
                                     SizedBox(
                                       height: 20,
                                     ),
-                                    Container(
-                                      width: size.width * 0.4,
-                                      child: FittedBox(
-                                        fit: BoxFit.scaleDown,
-                                        child: InkWellLink(
-                                          onclick: () async {
-                                            if (product.stored != null) {
-                                              SharedPreferences preferences =
-                                                  await SharedPreferences
-                                                      .getInstance();
-                                              position = await PositionService()
-                                                  .getPositionbyName(
-                                                      preferences
-                                                          .getString('token'),
-                                                      product.stored);
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        ViewStorage(
-                                                      position: position,
-                                                    ),
-                                                  ));
-                                            }
-                                          },
-                                          tag: 'Stored at: ' +
-                                              '${product.stored == null ? null.toString() : ""}',
-                                          text:
-                                              '${product.stored == null ? "" : product.stored}',
-                                        ),
+                                    Text(
+                                      "Stored at: ${product.stored == null ? null : product.stored}",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontStyle: FontStyle.italic,
                                       ),
                                     ),
                                   ],
@@ -486,9 +457,8 @@ class _ProductDetailsWithQRState extends State<ProductDetailsWithQR> {
                                         controller1.clear();
 
                                         setState(() {
-                                          setState(() {
-                                            load = !load;
-                                          });
+                                          load = !load;
+//
                                         });
                                       } else {
                                         log('comment...');

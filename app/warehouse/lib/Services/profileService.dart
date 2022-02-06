@@ -34,10 +34,8 @@ class ProfileServices {
   }
 
   getUserById(String token, String _id) async {
-    print('getUserByID');
     // var bodyf = jsonEncode(newUser.toJson());
     try {
-      print('User : ' + _id);
       var res = await http.get(
         Uri.parse(url + 'getProfile'),
         headers: {

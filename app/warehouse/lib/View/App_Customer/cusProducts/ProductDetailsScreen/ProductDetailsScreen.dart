@@ -1,21 +1,25 @@
 import 'dart:developer';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:warehouse/Models/Comment.dart';
+import 'package:warehouse/Models/cart.dart';
 import 'package:warehouse/Models/position.dart';
 import 'package:warehouse/Models/productModel.dart';
+import 'package:warehouse/Models/qrModel.dart';
 import 'package:warehouse/Services/commentService.dart';
-import 'package:warehouse/Services/positionService.dart';
+import 'package:warehouse/Services/productService.dart';
 import 'package:warehouse/Services/profileService.dart';
-import 'package:warehouse/View/App_Manager/Header.dart';
-import 'package:warehouse/View/App_Manager/ProductsScreen/QRList/QRListScreen.dart';
+import 'package:warehouse/View/App_Customer/customer_header.dart';
+
 import 'package:warehouse/View/App_Manager/mngHome/components/Drawer.dart';
-import 'package:warehouse/View/App_Manager/positionScreen/viewStorage/viewStorage.dart';
 import 'package:warehouse/colors.dart';
+
 import 'package:warehouse/components/inkwell_link.dart';
 import 'package:warehouse/components/loading_view.dart';
-import 'package:warehouse/components/shortButton.dart';
+import 'package:warehouse/components/myInputTextArea.dart';
 import 'package:warehouse/helper/Utils.dart';
 import 'package:warehouse/helper/actionToFile.dart';
 
@@ -34,12 +38,34 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   _ProductDetailsScreenState(this.product);
   Position position;
 
+  int count = 1;
   String choiceRep = '';
   TextEditingController controller1 = TextEditingController();
   TextEditingController controller2 = TextEditingController();
-  bool load = false;
 
-  Future getData(String supID) async {
+  countDown() {
+    if (count > 1) {
+      setState(() {
+        count--;
+      });
+    }
+  }
+
+  countReset() {
+    setState(() {
+      count = 1;
+    });
+  }
+
+  countUp() {
+    if (count < product.quantity) {
+      setState(() {
+        count++;
+      });
+    }
+  }
+
+  Future getSupplier(String supID) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     var user =
@@ -48,17 +74,24 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     return user;
   }
 
+  Future getQRs(String productID) async {
+    SharedPreferences pre = await SharedPreferences.getInstance();
+    return await ProductService()
+        .getQRsByProductID(pre.getString('token'), productID);
+  }
+
   Future getComments(String productID) async {
     return await CommentService().getCommentsOfProduct(productID);
   }
 
   @override
   Widget build(BuildContext context) {
+    final Cart cart = Provider.of<Cart>(context);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       drawer: MyDrawer(),
       body: FutureBuilder(
-        future: getData(product.supID),
+        future: getSupplier(product.supID),
         builder: (context, snapshot) {
           if (snapshot.data != null) {
             return Container(
@@ -66,10 +99,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 children: <Widget>[
                   Expanded(
                     flex: 1,
-                    child: Header(
-                      title: 'Product',
-                      userDrawer: false,
-                    ),
+                    child: Header(),
                   ),
                   Expanded(
                     flex: 5,
@@ -133,17 +163,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                             CrossAxisAlignment.start,
                                         children: <Widget>[
                                           Text(
-                                            "current Price: \$${product.importPrice}",
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontStyle: FontStyle.italic,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            "Rate Price: ${product.ratePrice}",
+                                            "Price: \$${product.importPrice * product.ratePrice}",
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontStyle: FontStyle.italic,
@@ -163,58 +183,129 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                                   fontStyle: FontStyle.italic,
                                                 ),
                                               ),
-                                              IconButton(
-                                                onPressed: () {
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          QRListScreen(
-                                                        product: product,
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
-                                                icon: Icon(Icons.next_plan),
-                                                color: my_org,
-                                              )
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              FutureBuilder(
+                                                  future: getQRs(product.id),
+                                                  builder: (context, snapshot) {
+                                                    if (snapshot.data != null) {
+                                                      List<QRModel> qrs =
+                                                          snapshot.data;
+                                                      return Text(
+                                                        "Sold: ${qrs.where((element) => element.cusID != null).toList().length}",
+                                                        style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontStyle:
+                                                              FontStyle.italic,
+                                                        ),
+                                                      );
+                                                    } else {
+                                                      return MyLoading();
+                                                    }
+                                                  }),
                                             ],
                                           ),
                                           SizedBox(
                                             height: 20,
                                           ),
-                                          Container(
-                                            width: size.width * 0.4,
-                                            child: FittedBox(
-                                              fit: BoxFit.scaleDown,
-                                              child: InkWellLink(
-                                                onclick: () async {
-                                                  if (product.stored != null) {
-                                                    SharedPreferences
-                                                        preferences =
-                                                        await SharedPreferences
-                                                            .getInstance();
-                                                    position =
-                                                        await PositionService()
-                                                            .getPositionbyName(
-                                                                preferences
-                                                                    .getString(
-                                                                        'token'),
-                                                                product.stored);
-                                                    Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              ViewStorage(
-                                                            position: position,
-                                                          ),
-                                                        ));
-                                                  }
+                                          Row(
+                                            children: <Widget>[
+                                              IconButton(
+                                                onPressed: () {
+                                                  countDown();
                                                 },
-                                                tag: 'Stored at: ' +
-                                                    '${product.stored == null ? null.toString() : ""}',
-                                                text:
-                                                    '${product.stored == null ? "" : product.stored}',
+                                                icon: Icon(
+                                                  Icons.remove_circle,
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                              Text('${count}'),
+                                              IconButton(
+                                                onPressed: () {
+                                                  countUp();
+                                                },
+                                                icon: Icon(
+                                                  Icons.add_circle,
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              CartItem item =
+                                                  cart.listItem.firstWhere(
+                                                (element) =>
+                                                    element.pId == product.id,
+                                                orElse: () => null,
+                                              );
+
+                                              if (item != null) {
+                                                if (item.count + count <=
+                                                    product.quantity) {
+                                                  cart.addItem(
+                                                      product.id,
+                                                      count,
+                                                      product,
+                                                      product.importPrice *
+                                                          product.ratePrice);
+                                                  myToast('Done');
+                                                } else {
+                                                  myToast(
+                                                      'Over quantity in Cart.');
+                                                }
+                                              } else {
+                                                cart.addItem(
+                                                    product.id,
+                                                    count,
+                                                    product,
+                                                    product.importPrice *
+                                                        product.ratePrice);
+                                                myToast('Done');
+                                              }
+                                              log(cart.totalAmount.toString());
+                                            },
+                                            child: Container(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 20,
+                                                vertical: 10,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                                color: my_org,
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    blurRadius: 5,
+                                                    offset: Offset(1, 1),
+                                                    color: Colors.grey,
+                                                  ),
+                                                ],
+                                              ),
+                                              child: FittedBox(
+                                                fit: BoxFit.contain,
+                                                child: Row(
+                                                  children: <Widget>[
+                                                    Icon(
+                                                      Icons.add_shopping_cart,
+                                                      color: my_org_30,
+                                                    ),
+                                                    Text(
+                                                      'Add to Cart',
+                                                      style: TextStyle(
+                                                        color: my_org_30,
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -304,38 +395,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     ),
                                   ),
                                 ),
-//Btn
-                                Positioned(
-                                  top: size.height * 0.73,
-                                  child: Container(
-                                    padding: EdgeInsets.fromLTRB(
-                                        size.width * 0.05,
-                                        0,
-                                        size.width * 0.05,
-                                        0),
-                                    width: size.width,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        // ShortButton(
-                                        //   height: 40,
-                                        //   width: size.width * 0.6,
-                                        //   onclick: () async {},
-                                        //   text: 'Store in',
-                                        // ),
-                                        // ShortButton(
-                                        //   height: 40,
-                                        //   width: size.width * 0.25,
-                                        //   onclick: () {
-                                        //     Navigator.pop(context, false);
-                                        //   },
-                                        //   text: 'Cancel',
-                                        // ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
                               ],
                             ),
                           ),
@@ -406,9 +465,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                               controller1.clear();
 
                                               setState(() {
-                                                setState(() {
-                                                  load = !load;
-                                                });
+                                                countReset();
                                               });
                                             } else {
                                               log('comment...');
@@ -563,7 +620,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           controller2.clear();
 
                           setState(() {
-                            load = !load;
+                            countReset();
                           });
                         } else {
                           log('comment...');

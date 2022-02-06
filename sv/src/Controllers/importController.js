@@ -87,7 +87,7 @@ module.exports.GetQRs = async (req, res) => {
         var user = await User.findOne({
             email: decodeToken.email,
         });
-        if (user != null && user.role == 'manager') {
+        if (user != null) {
             try {
                 if (isfindByProductID) {
                     qrs = await QR.find({

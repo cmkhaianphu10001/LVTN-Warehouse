@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:warehouse/Models/productModel.dart';
+import 'package:warehouse/Models/qrModel.dart';
 import 'package:warehouse/Models/userModel.dart';
 
 class CartItem {
@@ -28,7 +31,7 @@ class Cart extends ChangeNotifier {
 
   void addItem(String pId, int quantity, Product product, double price) {
     if (_items.containsKey(pId)) {
-      // log('update' + name);
+      // log('update' + product.productName);
       _items.update(
           pId,
           (existingCartItem) => CartItem(
@@ -37,7 +40,7 @@ class Cart extends ChangeNotifier {
               count: existingCartItem.count + quantity,
               newPrice: existingCartItem.newPrice));
     } else {
-      // log('add' + name);
+      // log('add' + product.productName);
       _items.putIfAbsent(
           pId,
           () => CartItem(
@@ -112,9 +115,11 @@ class Export {
     this.date,
     this.totalPrice,
     this.listProduct,
+    this.listQR,
   });
   final User customer;
   final DateTime date;
   final double totalPrice;
   final List<CartItem> listProduct;
+  final List<QRModel> listQR;
 }

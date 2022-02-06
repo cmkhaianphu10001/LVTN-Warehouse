@@ -1,45 +1,44 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:warehouse/Models/Comment.dart';
+import 'package:warehouse/Models/cart.dart';
 import 'package:warehouse/Models/position.dart';
 import 'package:warehouse/Models/productModel.dart';
+import 'package:warehouse/Models/qrModel.dart';
 import 'package:warehouse/Services/commentService.dart';
-import 'package:warehouse/Services/positionService.dart';
+import 'package:warehouse/Services/productService.dart';
 import 'package:warehouse/Services/profileService.dart';
-import 'package:warehouse/View/App_Manager/Header.dart';
-import 'package:warehouse/View/App_Manager/ProductsScreen/QRList/QRListScreen.dart';
-import 'package:warehouse/View/App_Manager/mngHome/components/Drawer.dart';
-import 'package:warehouse/View/App_Manager/positionScreen/viewStorage/viewStorage.dart';
+import 'package:warehouse/View/App_Supplier/Header.dart';
+
 import 'package:warehouse/colors.dart';
+
 import 'package:warehouse/components/inkwell_link.dart';
 import 'package:warehouse/components/loading_view.dart';
-import 'package:warehouse/components/shortButton.dart';
 import 'package:warehouse/helper/Utils.dart';
 import 'package:warehouse/helper/actionToFile.dart';
 
-class ProductDetailsScreen extends StatefulWidget {
-  const ProductDetailsScreen({Key key, this.product}) : super(key: key);
+class SupplierProductDetailsScreen extends StatefulWidget {
+  const SupplierProductDetailsScreen({Key key, this.product}) : super(key: key);
   final Product product;
 
   @override
-  _ProductDetailsScreenState createState() =>
-      _ProductDetailsScreenState(product);
+  _SupplierProductDetailsScreenState createState() =>
+      _SupplierProductDetailsScreenState(product);
 }
 
-class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
+class _SupplierProductDetailsScreenState
+    extends State<SupplierProductDetailsScreen> {
   final Product product;
 
-  _ProductDetailsScreenState(this.product);
+  _SupplierProductDetailsScreenState(this.product);
   Position position;
 
-  String choiceRep = '';
-  TextEditingController controller1 = TextEditingController();
-  TextEditingController controller2 = TextEditingController();
-  bool load = false;
+  int count = 1;
 
-  Future getData(String supID) async {
+  Future getSupplier(String supID) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     var user =
@@ -48,17 +47,23 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     return user;
   }
 
+  Future getQRs(String productID) async {
+    SharedPreferences pre = await SharedPreferences.getInstance();
+    return await ProductService()
+        .getQRsByProductID(pre.getString('token'), productID);
+  }
+
   Future getComments(String productID) async {
     return await CommentService().getCommentsOfProduct(productID);
   }
 
   @override
   Widget build(BuildContext context) {
+    final Cart cart = Provider.of<Cart>(context);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      drawer: MyDrawer(),
       body: FutureBuilder(
-        future: getData(product.supID),
+        future: getSupplier(product.supID),
         builder: (context, snapshot) {
           if (snapshot.data != null) {
             return Container(
@@ -66,10 +71,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 children: <Widget>[
                   Expanded(
                     flex: 1,
-                    child: Header(
-                      title: 'Product',
-                      userDrawer: false,
-                    ),
+                    child: Header(),
                   ),
                   Expanded(
                     flex: 5,
@@ -123,9 +125,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 // price and input
                                 Positioned(
                                   right: size.width * 0.05,
-                                  top: size.height * 0.1,
+                                  top: size.height * 0.3,
                                   child: Container(
-                                    width: size.width * 0.4,
+                                    width: size.width * 0.3,
                                     child: FittedBox(
                                       fit: BoxFit.contain,
                                       child: Column(
@@ -133,17 +135,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                             CrossAxisAlignment.start,
                                         children: <Widget>[
                                           Text(
-                                            "current Price: \$${product.importPrice}",
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontStyle: FontStyle.italic,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Text(
-                                            "Rate Price: ${product.ratePrice}",
+                                            "Price: \$${product.importPrice * product.ratePrice}",
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontStyle: FontStyle.italic,
@@ -163,60 +155,32 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                                   fontStyle: FontStyle.italic,
                                                 ),
                                               ),
-                                              IconButton(
-                                                onPressed: () {
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          QRListScreen(
-                                                        product: product,
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
-                                                icon: Icon(Icons.next_plan),
-                                                color: my_org,
-                                              )
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              FutureBuilder(
+                                                  future: getQRs(product.id),
+                                                  builder: (context, snapshot) {
+                                                    if (snapshot.data != null) {
+                                                      List<QRModel> qrs =
+                                                          snapshot.data;
+                                                      return Text(
+                                                        "Sold: ${qrs.where((element) => element.cusID != null).toList().length}",
+                                                        style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontStyle:
+                                                              FontStyle.italic,
+                                                        ),
+                                                      );
+                                                    } else {
+                                                      return MyLoading();
+                                                    }
+                                                  }),
                                             ],
                                           ),
                                           SizedBox(
                                             height: 20,
-                                          ),
-                                          Container(
-                                            width: size.width * 0.4,
-                                            child: FittedBox(
-                                              fit: BoxFit.scaleDown,
-                                              child: InkWellLink(
-                                                onclick: () async {
-                                                  if (product.stored != null) {
-                                                    SharedPreferences
-                                                        preferences =
-                                                        await SharedPreferences
-                                                            .getInstance();
-                                                    position =
-                                                        await PositionService()
-                                                            .getPositionbyName(
-                                                                preferences
-                                                                    .getString(
-                                                                        'token'),
-                                                                product.stored);
-                                                    Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              ViewStorage(
-                                                            position: position,
-                                                          ),
-                                                        ));
-                                                  }
-                                                },
-                                                tag: 'Stored at: ' +
-                                                    '${product.stored == null ? null.toString() : ""}',
-                                                text:
-                                                    '${product.stored == null ? "" : product.stored}',
-                                              ),
-                                            ),
                                           ),
                                         ],
                                       ),
@@ -304,38 +268,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                     ),
                                   ),
                                 ),
-//Btn
-                                Positioned(
-                                  top: size.height * 0.73,
-                                  child: Container(
-                                    padding: EdgeInsets.fromLTRB(
-                                        size.width * 0.05,
-                                        0,
-                                        size.width * 0.05,
-                                        0),
-                                    width: size.width,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        // ShortButton(
-                                        //   height: 40,
-                                        //   width: size.width * 0.6,
-                                        //   onclick: () async {},
-                                        //   text: 'Store in',
-                                        // ),
-                                        // ShortButton(
-                                        //   height: 40,
-                                        //   width: size.width * 0.25,
-                                        //   onclick: () {
-                                        //     Navigator.pop(context, false);
-                                        //   },
-                                        //   text: 'Cancel',
-                                        // ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
                               ],
                             ),
                           ),
@@ -390,31 +322,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                                   } else {
                                                     return MyLoading();
                                                   }
-                                                }),
-                                        _inputComment(
-                                          controller: controller1,
-                                          onPressed: () async {
-                                            if (controller1.text.length != 0) {
-                                              log(controller1.text);
-                                              await CommentService()
-                                                  .addComment(new Comment(
-                                                id: null,
-                                                productID: product.id,
-                                                content: controller1.text,
-                                                replyTo: null,
-                                              ));
-                                              controller1.clear();
-
-                                              setState(() {
-                                                setState(() {
-                                                  load = !load;
-                                                });
-                                              });
-                                            } else {
-                                              log('comment...');
-                                            }
-                                          },
-                                        ),
+                                                },
+                                              ),
                                       ],
                                     ),
                                   );
@@ -433,29 +342,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             return MyLoading();
           }
         },
-      ),
-    );
-  }
-
-  _inputComment({
-    @required Function onPressed,
-    @required TextEditingController controller,
-  }) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20),
-      child: TextField(
-        controller: controller,
-        decoration: InputDecoration(
-          hintText: 'Comment...',
-          focusColor: my_org,
-          suffixIcon: IconButton(
-            onPressed: onPressed,
-            icon: Icon(
-              Icons.send,
-              color: my_org,
-            ),
-          ),
-        ),
       ),
     );
   }
@@ -539,38 +425,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   ),
                 ],
               ),
-              InkWellLink(
-                tag: '',
-                text: 'Reply',
-                onclick: () {
-                  setState(() {
-                    choiceRep = comment.id;
-                  });
-                },
-              ),
-              choiceRep == comment.id
-                  ? _inputComment(
-                      controller: controller2,
-                      onPressed: () async {
-                        if (controller2.text.length != 0) {
-                          log(controller2.text);
-                          await CommentService().addComment(new Comment(
-                            id: null,
-                            productID: product.id,
-                            content: controller2.text,
-                            replyTo: comment.id,
-                          ));
-                          controller2.clear();
-
-                          setState(() {
-                            load = !load;
-                          });
-                        } else {
-                          log('comment...');
-                        }
-                      },
-                    )
-                  : Container(),
             ],
           ),
         ),
