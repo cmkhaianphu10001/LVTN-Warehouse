@@ -9,17 +9,20 @@ class User {
   String image;
   String role;
   bool verify;
-  User(
-      {this.id,
-      this.name,
-      this.email,
-      this.address,
-      this.description = '',
-      this.password,
-      this.phone,
-      this.image = '',
-      this.verify = false,
-      this.role = ''});
+  DateTime lastMessTime;
+  User({
+    this.id,
+    this.name,
+    this.email,
+    this.address,
+    this.description = '',
+    this.password,
+    this.phone,
+    this.image = '',
+    this.verify = false,
+    this.role = '',
+    this.lastMessTime,
+  });
 
   User.fromJson(Map<String, dynamic> json)
       : name = json['name'] ?? '',
@@ -31,7 +34,10 @@ class User {
         description = json['description'] ?? '',
         image = json['image'] ?? '',
         verify = json['verify'] ?? false,
-        role = json['role'] ?? '';
+        role = json['role'] ?? '',
+        lastMessTime = json['lastMessTime'] != null
+            ? DateTime.parse(json['lastMessTime'])
+            : DateTime.now();
 
   Map<String, dynamic> toJson() => {
         '_id': id,
@@ -44,5 +50,6 @@ class User {
         'image': image,
         'verify': verify,
         'role': role,
+        'lastMessTime': lastMessTime,
       };
 }

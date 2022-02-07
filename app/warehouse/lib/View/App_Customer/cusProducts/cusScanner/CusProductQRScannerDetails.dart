@@ -423,25 +423,14 @@ class _CusProductDetailsWithQRState extends State<CusProductDetailsWithQR> {
                                   ),
                                   comments.length == 0
                                       ? Container()
-                                      : FutureBuilder(
-                                          future: getComments(product.id),
-                                          builder: (context, snapshot) {
-                                            if (snapshot.data != null) {
-                                              List<Comment> comments =
-                                                  snapshot.data;
-                                              return Expanded(
-                                                child: _listComment(
-                                                  allComments: comments,
-                                                  comments: comments
-                                                      .where((e) =>
-                                                          e.replyTo == null)
-                                                      .toList(),
-                                                ),
-                                              );
-                                            } else {
-                                              return MyLoading();
-                                            }
-                                          }),
+                                      : Expanded(
+                                          child: _listComment(
+                                            allComments: comments,
+                                            comments: comments
+                                                .where((e) => e.replyTo == null)
+                                                .toList(),
+                                          ),
+                                        ),
                                   _inputComment(
                                     controller: controller1,
                                     onPressed: () async {

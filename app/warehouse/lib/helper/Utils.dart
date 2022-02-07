@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:warehouse/Models/userModel.dart';
 
 class Util {
   // static List<CustomerPurcharByMonth> remakeListCustomerPurcharByMonth(
@@ -98,4 +99,9 @@ handleQRcode(String resultCode) {
   } else {
     return results[1];
   }
+}
+
+getRoomId(User a, User b) {
+  if (a.role != 'manager') return '${a.id}_manager';
+  if (b.role != 'manager') return '${b.id}_manager';
 }

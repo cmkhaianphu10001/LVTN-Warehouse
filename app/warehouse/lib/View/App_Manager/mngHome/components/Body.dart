@@ -3,6 +3,7 @@ import 'package:warehouse/View/App_Manager/Header.dart';
 import 'package:warehouse/View/App_Manager/ProductsScreen/ProductsScreen.dart';
 import 'package:warehouse/View/App_Manager/exportScreen/ExportScreen.dart';
 import 'package:warehouse/View/App_Manager/importScreen/ImportScreen.dart';
+import 'package:warehouse/View/Message/ListChannel/ListChannel.dart';
 import 'package:warehouse/helper/my_icons_icons.dart';
 import 'package:warehouse/colors.dart';
 
@@ -155,11 +156,17 @@ class _BodyState extends State<Body> {
                         //1.4
                         ElementButton(
                           color: my_org,
-                          icon: MyIcons.housewife_shopping_1,
+                          icon: Icons.message,
                           id: 4,
                           focus: focus,
-                          label: 'Customer',
-                          onTap: () {},
+                          label: 'Message',
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ListChannel(),
+                                ));
+                          },
                           onTapDown: (v) async {
                             setState(() {
                               focus = 4;
@@ -203,10 +210,10 @@ class _BodyState extends State<Body> {
                         //2.2
                         ElementButton(
                           color: my_org,
-                          icon: Icons.history,
+                          icon: MyIcons.housewife_shopping_1,
                           id: 6,
                           focus: focus,
-                          label: 'History',
+                          label: 'Customer',
                           onTap: () {},
                           onTapDown: (v) async {
                             setState(() {
@@ -241,10 +248,10 @@ class _BodyState extends State<Body> {
                         //2.4
                         ElementButton(
                           color: my_org,
-                          icon: Icons.phone_in_talk_outlined,
+                          icon: Icons.history,
                           id: 8,
                           focus: focus,
-                          label: 'Contact',
+                          label: 'History',
                           onTap: () {},
                           onTapDown: (v) async {
                             setState(() {

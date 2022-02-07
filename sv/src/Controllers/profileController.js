@@ -3,7 +3,7 @@
 const JWT = require('jsonwebtoken');
 // const { Profile } = require('../Model/profile')
 const { User } = require('../Model/user');
-// const { use } = require('../Routers/profile');
+const { Comment } = require('../Model/comment');
 
 const multerHandle = require('./multerHandle');
 
@@ -96,10 +96,24 @@ module.exports.changeAvatar = async (req, res) => {
         } else {
 
             //storage images
-            console.log(req.body.image)
-            user.image = req.body.image;
-            user.save();
-            return res.status(200).send('Change avatar successful')
+            try {
+                console.log(req.body.image)
+                user.image = req.body.image;
+                user.save();
+
+                var comments = await Comment.find({
+                    userID: user._id,
+                })
+                await comments.forEach(element => {
+                    element.userImage = user.image;
+                    element.save();
+
+                });
+                return res.status(200).send('Change avatar successful')
+            } catch (error) {
+                console.log(error);
+            }
+
         }
     } else {
         return res.status(400).send("Wrong token, Please login")

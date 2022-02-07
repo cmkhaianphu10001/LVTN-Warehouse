@@ -43,15 +43,17 @@ class Header extends StatelessWidget {
             ),
           ),
           Container(
-            height: 50,
-            width: 50,
             decoration: BoxDecoration(
-              color: Color(0xffffe3c0),
-              borderRadius: BorderRadius.circular(25),
+              color: my_org_30,
+              borderRadius: BorderRadius.circular(50),
             ),
-            child: GestureDetector(
-              child: Icon(Icons.person),
-              onTap: () {
+            child: IconButton(
+              icon: Icon(
+                Icons.person_pin_circle_rounded,
+                color: Colors.black,
+                size: 30,
+              ),
+              onPressed: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => ProfileScreen()));
               },
