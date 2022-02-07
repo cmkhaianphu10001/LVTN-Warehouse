@@ -39,7 +39,7 @@ class _ChannelState extends State<Channel> {
     @required this.myself,
     @required this.target,
   });
-
+  ScrollController _scrollController = ScrollController();
   TextEditingController inputMessage = TextEditingController();
   Stream messageStream;
 
@@ -51,7 +51,6 @@ class _ChannelState extends State<Channel> {
         "message": inputMessage.text,
         "sendBy": myself.id,
         "timeSend": DateTime.now().millisecondsSinceEpoch,
-        "role": myself.role,
       };
       ChatDatabase().sendMessage(roomID, data);
       inputMessage.text = '';
@@ -67,6 +66,7 @@ class _ChannelState extends State<Channel> {
     // TODO: implement initState
     messageStream = ChatDatabase().getMessage(roomID);
     setReaded();
+
     super.initState();
   }
 
@@ -78,29 +78,39 @@ class _ChannelState extends State<Channel> {
         centerTitle: true,
         backgroundColor: my_org,
       ),
-      bottomSheet: TextField(
-        controller: inputMessage,
-        decoration: InputDecoration(
-          labelText: 'message',
-          border: InputBorder.none,
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(5.0)),
-            borderSide: BorderSide(color: Colors.blue),
+      body: Column(
+        children: [
+          Expanded(
+            flex: 10,
+            child: listMessage(),
           ),
-          filled: true,
-          contentPadding: EdgeInsets.all(10),
-          suffixIcon: IconButton(
-            onPressed: () async {
-              sendMessage();
-            },
-            icon: Icon(
-              Icons.send,
+          Expanded(
+            flex: 1,
+            child: TextField(
+              controller: inputMessage,
+              decoration: InputDecoration(
+                labelText: 'message',
+                border: InputBorder.none,
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                  borderSide: BorderSide(color: Colors.blue),
+                ),
+                filled: true,
+                contentPadding: EdgeInsets.all(10),
+                suffixIcon: IconButton(
+                  onPressed: () async {
+                    sendMessage();
+                  },
+                  icon: Icon(
+                    Icons.send,
+                  ),
+                ),
+                hintText: '...',
+              ),
             ),
-          ),
-          hintText: '...',
-        ),
+          )
+        ],
       ),
-      body: listMessage(),
     );
   }
 
@@ -110,66 +120,57 @@ class _ChannelState extends State<Channel> {
       builder: (context, snapshot) {
         if (snapshot.data != null) {
           return ListView.builder(
+            reverse: true,
+            controller: _scrollController,
             padding: EdgeInsets.symmetric(horizontal: 10),
             itemCount: snapshot.data.docs.length,
             itemBuilder: (context, index) {
-              return snapshot.data.docs[index]['role'] == 'manager'
-                  ? snapshot.data.docs[index]['sendBy'] == myself.id
-                      ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text("${snapshot.data.docs[index]['ownName']}"),
-                            ChatBubble(
-                              clipper: ChatBubbleClipper1(
-                                type: BubbleType.sendBubble,
-                              ),
-                              alignment: Alignment.topRight,
-                              margin: EdgeInsets.only(bottom: 20),
-                              backGroundColor: my_org,
-                              child: Container(
-                                constraints: BoxConstraints(
-                                  maxWidth:
-                                      MediaQuery.of(context).size.width * 0.7,
-                                ),
-                                child: Text(
-                                  "${snapshot.data.docs[index]['message']}",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
+              messageStream.listen((event) {
+                if (_scrollController.hasClients) {
+                  _scrollController.animateTo(0,
+                      duration: Duration(milliseconds: 2000),
+                      curve: Curves.easeInOut);
+                }
+              });
+
+              return snapshot.data.docs[index]['sendBy'] == myself.id
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text("${snapshot.data.docs[index]['ownName']}"),
+                        ChatBubble(
+                          clipper: ChatBubbleClipper1(
+                            type:
+                                snapshot.data.docs[index]['sendBy'] == myself.id
+                                    ? BubbleType.sendBubble
+                                    : BubbleType.receiverBubble,
+                          ),
+                          alignment: Alignment.topRight,
+                          margin: EdgeInsets.only(bottom: 20),
+                          backGroundColor: my_org,
+                          child: Container(
+                            constraints: BoxConstraints(
+                              maxWidth: MediaQuery.of(context).size.width * 0.7,
                             ),
-                          ],
-                        )
-                      : Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text("${snapshot.data.docs[index]['ownName']}"),
-                            ChatBubble(
-                              clipper: ChatBubbleClipper1(
-                                type: BubbleType.sendBubble,
-                              ),
-                              alignment: Alignment.topRight,
-                              margin: EdgeInsets.only(bottom: 20),
-                              backGroundColor: my_org_30,
-                              child: Container(
-                                constraints: BoxConstraints(
-                                  maxWidth:
-                                      MediaQuery.of(context).size.width * 0.7,
-                                ),
-                                child: Text(
-                                  "${snapshot.data.docs[index]['message']}",
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                              ),
+                            child: Text(
+                              "${snapshot.data.docs[index]['message']}",
+                              style: TextStyle(color: Colors.white),
                             ),
-                          ],
-                        )
+                          ),
+                        ),
+                      ],
+                    )
                   : Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text("${snapshot.data.docs[index]['ownName']}"),
                         ChatBubble(
                           clipper: ChatBubbleClipper1(
-                              type: BubbleType.receiverBubble),
+                            type:
+                                snapshot.data.docs[index]['sendBy'] == myself.id
+                                    ? BubbleType.sendBubble
+                                    : BubbleType.receiverBubble,
+                          ),
                           backGroundColor: Color(0xffE7E7ED),
                           margin: EdgeInsets.only(bottom: 20),
                           child: Container(

@@ -48,7 +48,7 @@ class ChatDatabase {
         .collection(chatrooms)
         .doc(channelID)
         .collection(message)
-        .orderBy('timeSend', descending: false)
+        .orderBy('timeSend', descending: true)
         .snapshots();
   }
 
