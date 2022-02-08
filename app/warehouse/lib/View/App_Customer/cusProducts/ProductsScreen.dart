@@ -124,7 +124,6 @@ class _ListProductState extends State<ListProduct> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     products = oProducts;
   }

@@ -30,7 +30,6 @@ class _SupHomeState extends State<SupHome> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Body(),
     );

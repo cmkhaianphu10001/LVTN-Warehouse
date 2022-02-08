@@ -15,8 +15,6 @@ import 'package:warehouse/View/App_Manager/positionScreen/viewStorage/viewStorag
 import 'package:warehouse/colors.dart';
 import 'package:warehouse/components/inkwell_link.dart';
 import 'package:warehouse/components/loading_view.dart';
-import 'package:warehouse/components/shortButton.dart';
-import 'package:warehouse/helper/Utils.dart';
 import 'package:warehouse/helper/actionToFile.dart';
 
 class ProductDetailsScreen extends StatefulWidget {

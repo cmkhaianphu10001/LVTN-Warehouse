@@ -1,4 +1,4 @@
-import 'dart:developer';
+// ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -11,8 +11,6 @@ import 'package:warehouse/View/App_Manager/positionScreen/ListProductUnStored/Li
 import 'package:warehouse/View/App_Manager/positionScreen/SetItemByQR/SetItemByQRScreen.dart';
 import 'package:warehouse/colors.dart';
 import 'package:warehouse/components/loading_view.dart';
-import 'package:warehouse/components/myDialog.dart';
-import 'package:warehouse/components/shortButton.dart';
 import 'package:warehouse/helper/Utils.dart';
 import 'package:warehouse/helper/actionToFile.dart';
 

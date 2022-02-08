@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,7 +18,6 @@ import 'package:warehouse/colors.dart';
 
 import 'package:warehouse/components/inkwell_link.dart';
 import 'package:warehouse/components/loading_view.dart';
-import 'package:warehouse/components/myInputTextArea.dart';
 import 'package:warehouse/helper/Utils.dart';
 import 'package:warehouse/helper/actionToFile.dart';
 
@@ -221,7 +219,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                                   color: Colors.grey,
                                                 ),
                                               ),
-                                              Text('${count}'),
+                                              Text('${count.toString()}'),
                                               IconButton(
                                                 onPressed: () {
                                                   countUp();

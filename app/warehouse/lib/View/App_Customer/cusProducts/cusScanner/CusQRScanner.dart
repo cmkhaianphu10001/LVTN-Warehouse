@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -30,7 +29,6 @@ class _CusScanQRProductState extends State<CusScanQRProduct> {
 
   @override
   void reassemble() {
-    // TODO: implement reassemble
     super.reassemble();
     if (Platform.isAndroid) {
       controller.pauseCamera();

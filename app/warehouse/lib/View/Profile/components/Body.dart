@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,7 +22,6 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   String token;
-  File _imagePicked;
   User profile;
   Future getProfile() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();

@@ -23,11 +23,8 @@ class _ListProductState extends State<ListProduct> {
     });
   }
 
-  var _load;
   _getRequests() async {
-    setState(() {
-      _load = '';
-    });
+    setState(() {});
   }
 
   String token;

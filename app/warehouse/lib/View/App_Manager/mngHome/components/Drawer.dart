@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:warehouse/View/App_Manager/positionScreen/positionScreen.dart';
 import 'package:warehouse/View/App_Manager/requestAccountList/ReqiuestAccountList.dart';
 import 'package:warehouse/View/App_Manager/undealProduct/UndealProductScreen.dart';
-import 'package:warehouse/colors.dart';
 // import 'package:warehouse/screen/addProductScreen/addProductScreen.dart';
 import 'package:warehouse/wrapper.dart';
 

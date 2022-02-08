@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:warehouse/Models/productModel.dart';
 import 'package:warehouse/Services/productService.dart';
-import 'package:warehouse/View/App_Manager/ProductsScreen/productDetail/productDetailScreen.dart';
 import 'package:warehouse/View/App_Supplier/productDetailsScreen/SupProductDetailsScreen.dart';
 import 'package:warehouse/colors.dart';
 import 'package:warehouse/components/loading_view.dart';

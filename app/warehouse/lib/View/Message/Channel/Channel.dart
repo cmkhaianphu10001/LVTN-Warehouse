@@ -1,6 +1,3 @@
-import 'dart:developer';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_bubble/bubble_type.dart';
 import 'package:flutter_chat_bubble/chat_bubble.dart';
@@ -63,7 +60,6 @@ class _ChannelState extends State<Channel> {
 
   @override
   void initState() {
-    // TODO: implement initState
     messageStream = ChatDatabase().getMessage(roomID);
     setReaded();
 

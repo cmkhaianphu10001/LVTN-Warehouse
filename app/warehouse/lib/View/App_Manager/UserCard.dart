@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:warehouse/Models/userModel.dart';
-import 'package:warehouse/colors.dart';
 import 'package:warehouse/helper/actionToFile.dart';
 
 class UserCard extends StatelessWidget {

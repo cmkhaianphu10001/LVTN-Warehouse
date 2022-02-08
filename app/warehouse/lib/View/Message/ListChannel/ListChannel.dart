@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,7 +8,6 @@ import 'package:warehouse/View/Message/Channel/Channel.dart';
 import 'package:warehouse/View/Message/CreateChannel/CreateChannel.dart';
 import 'package:warehouse/colors.dart';
 import 'package:warehouse/components/loading_view.dart';
-import 'package:warehouse/components/searchBar.dart';
 import 'package:warehouse/helper/Utils.dart';
 import 'package:warehouse/helper/actionToFile.dart';
 
@@ -41,7 +38,6 @@ class _ListChannelState extends State<ListChannel> {
 
   @override
   void initState() {
-    // TODO: implement initState
     listConversationStream = ChatDatabase().getChannel();
     super.initState();
   }
@@ -140,6 +136,7 @@ class _ListChannelState extends State<ListChannel> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(

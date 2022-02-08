@@ -30,7 +30,6 @@ class _CusHomeState extends State<CusHome> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Body(),
     );

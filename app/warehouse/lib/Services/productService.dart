@@ -7,7 +7,6 @@ import 'package:warehouse/Models/productModel.dart';
 import 'package:warehouse/Models/qrModel.dart';
 import 'package:warehouse/Models/undealProductModel.dart';
 import 'package:warehouse/colors.dart';
-import 'package:warehouse/helper/Utils.dart';
 import 'package:warehouse/helper/uploadImage.dart';
 
 class ProductService {

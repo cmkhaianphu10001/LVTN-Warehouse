@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:firebase_storage/firebase_storage.dart' as storage;
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:warehouse/Models/userModel.dart';

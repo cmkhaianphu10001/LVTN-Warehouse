@@ -30,7 +30,6 @@ class _QRViewPositionState extends State<QRViewPosition> {
 
   @override
   void reassemble() {
-    // TODO: implement reassemble
     super.reassemble();
     if (Platform.isAndroid) {
       controller.pauseCamera();

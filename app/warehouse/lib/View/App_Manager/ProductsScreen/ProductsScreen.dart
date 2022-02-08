@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:warehouse/Models/productModel.dart';
@@ -131,7 +129,6 @@ class _ListProductState extends State<ListProduct> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     products = oProducts;
   }

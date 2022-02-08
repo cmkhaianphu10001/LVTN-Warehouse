@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:warehouse/Models/cart.dart';
 import 'package:warehouse/Models/productModel.dart';
 import 'package:warehouse/Models/userModel.dart';

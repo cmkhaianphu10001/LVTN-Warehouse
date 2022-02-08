@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:warehouse/View/App_Manager/Header.dart';
-import 'package:warehouse/View/App_Supplier/addNewProduct/AddNewProductScreen.dart';
 import 'package:warehouse/colors.dart';
 
 import 'listProduct.dart';
@@ -14,11 +13,6 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   var load;
-  _getRequests() async {
-    setState(() {
-      load = '';
-    });
-  }
 
   @override
   Widget build(BuildContext context) {

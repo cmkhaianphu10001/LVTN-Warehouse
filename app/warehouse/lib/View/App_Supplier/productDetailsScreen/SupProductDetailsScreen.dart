@@ -1,10 +1,6 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:warehouse/Models/Comment.dart';
-import 'package:warehouse/Models/cart.dart';
 import 'package:warehouse/Models/position.dart';
 import 'package:warehouse/Models/productModel.dart';
 import 'package:warehouse/Models/qrModel.dart';
@@ -15,9 +11,7 @@ import 'package:warehouse/View/App_Supplier/Header.dart';
 
 import 'package:warehouse/colors.dart';
 
-import 'package:warehouse/components/inkwell_link.dart';
 import 'package:warehouse/components/loading_view.dart';
-import 'package:warehouse/helper/Utils.dart';
 import 'package:warehouse/helper/actionToFile.dart';
 
 class SupplierProductDetailsScreen extends StatefulWidget {
@@ -59,7 +53,6 @@ class _SupplierProductDetailsScreenState
 
   @override
   Widget build(BuildContext context) {
-    final Cart cart = Provider.of<Cart>(context);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: FutureBuilder(
