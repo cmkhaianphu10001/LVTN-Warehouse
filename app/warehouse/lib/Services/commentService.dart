@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:warehouse/Models/Comment.dart';
+import 'package:warehouse/Models/comment.dart';
 import 'package:warehouse/colors.dart';
 import 'package:http/http.dart' as http;
 

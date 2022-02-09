@@ -3,8 +3,10 @@ import 'package:jwt_decode/jwt_decode.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:warehouse/Models/userModel.dart';
 import 'package:warehouse/Services/userService.dart';
+import 'package:warehouse/View/App_Customer/Cart/CartScreen.dart';
 import 'package:warehouse/View/App_Customer/cusProducts/ProductsScreen.dart';
 import 'package:warehouse/View/App_Customer/customer_header.dart';
+import 'package:warehouse/View/App_Customer/orders/OrdersScreen.dart';
 import 'package:warehouse/View/Message/Channel/Channel.dart';
 import 'package:warehouse/components/loading_view.dart';
 
@@ -136,7 +138,18 @@ class _BodyState extends State<Body> {
                                   id: 2,
                                   focus: focus,
                                   label: 'Cart',
-                                  onTap: () {},
+                                  onTap: () async {
+                                    SharedPreferences pre =
+                                        await SharedPreferences.getInstance();
+                                    String myID = Jwt.parseJwt(
+                                        pre.getString('token'))['id'];
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              CustomerCartScreen(myID: myID),
+                                        ));
+                                  },
                                   onTapDown: (v) async {
                                     setState(() {
                                       focus = 2;
@@ -151,11 +164,20 @@ class _BodyState extends State<Body> {
                                 //1.3
                                 ElementButton(
                                   color: my_org,
-                                  icon: Icons.history,
+                                  icon: Icons.list_alt,
                                   id: 3,
                                   focus: focus,
-                                  label: 'History',
-                                  onTap: () {},
+                                  label: 'Orders',
+                                  onTap: () async {
+                                    User myself =
+                                        await getMyself(snapshot.data);
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              OrdersScreen(myself: myself),
+                                        ));
+                                  },
                                   onTapDown: (v) async {
                                     setState(() {
                                       focus = 3;

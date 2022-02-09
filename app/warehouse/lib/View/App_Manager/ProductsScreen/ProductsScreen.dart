@@ -49,7 +49,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
               flex: 1,
               child: Header(
                 title: 'Products',
-                userDrawer: true,
+                userDrawer: false,
               ),
             ),
             Expanded(

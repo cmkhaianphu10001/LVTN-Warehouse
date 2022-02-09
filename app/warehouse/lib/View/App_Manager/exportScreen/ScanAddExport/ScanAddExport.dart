@@ -1,31 +1,33 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:warehouse/Models/cart.dart';
 import 'package:warehouse/Models/productModel.dart';
 import 'package:warehouse/Models/qrModel.dart';
 import 'package:warehouse/Models/userModel.dart';
 import 'package:warehouse/Services/productService.dart';
 import 'package:warehouse/Services/userService.dart';
-import 'package:warehouse/View/App_Customer/cusProducts/cusScanner/CusProductQRScannerDetails.dart';
-
+import 'package:warehouse/View/App_Manager/ProductsScreen/scanProduct/productDetailsWithQR.dart';
 import 'package:warehouse/colors.dart';
 import 'package:warehouse/components/loading_view.dart';
 import 'package:warehouse/helper/Utils.dart';
 import 'package:warehouse/helper/actionToFile.dart';
 
-class CusScanQRProduct extends StatefulWidget {
-  const CusScanQRProduct({Key key}) : super(key: key);
+class ScanAddExport extends StatefulWidget {
+  const ScanAddExport({Key key}) : super(key: key);
 
   @override
-  _CusScanQRProductState createState() => _CusScanQRProductState();
+  _ScanAddExportState createState() => _ScanAddExportState();
 }
 
-class _CusScanQRProductState extends State<CusScanQRProduct> {
+class _ScanAddExportState extends State<ScanAddExport> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   Barcode result;
   QRViewController controller;
+  bool load = false;
 
   @override
   void reassemble() {
@@ -62,6 +64,7 @@ class _CusScanQRProductState extends State<CusScanQRProduct> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    Cart cart = Provider.of<Cart>(context);
     return Scaffold(
       floatingActionButton: Stack(children: [
         Positioned(
@@ -170,6 +173,8 @@ class _CusScanQRProductState extends State<CusScanQRProduct> {
                                                                 fontSize: 12),
                                                           ),
                                                           Text(
+                                                              '\$${product.importPrice}'),
+                                                          Text(
                                                               '${users.firstWhere((element) => element.id == qrModel.managerIDImport).name}'),
                                                         ],
                                                       ),
@@ -197,6 +202,12 @@ class _CusScanQRProductState extends State<CusScanQRProduct> {
                                                                       )
                                                                     : Text(
                                                                         '${null}'),
+                                                                qrModel.cusID !=
+                                                                        null
+                                                                    ? Text(
+                                                                        '\$${product.importPrice * product.ratePrice}')
+                                                                    : Text(
+                                                                        '${null}'),
                                                                 Text(
                                                                     // 'ManagerExportName'),
                                                                     '${qrModel.cusID != null ? users.firstWhere((element) => element.id == qrModel.managerIDExport).name : null}'),
@@ -209,32 +220,82 @@ class _CusScanQRProductState extends State<CusScanQRProduct> {
                                                         )
                                                       : Text(''),
                                                 ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Container(
-                                                    child: IconButton(
-                                                      onPressed: () {
-                                                        Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  CusProductDetailsWithQR(
-                                                                product:
-                                                                    product,
-                                                                qrModel:
-                                                                    qrModel,
-                                                                users: users,
-                                                              ),
-                                                            ));
-                                                      },
-                                                      icon: Icon(
-                                                        Icons.next_plan,
-                                                        color: my_org,
-                                                        size: 30,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
+                                                qrModel.cusID == null
+                                                    ? Expanded(
+                                                        flex: 1,
+                                                        child: Container(
+                                                          child: cart.listQR
+                                                                  .contains(
+                                                                      qrModel
+                                                                          .id)
+                                                              ? IconButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    if (cart.listItem
+                                                                            .firstWhere((element) =>
+                                                                                element.pId ==
+                                                                                product.id)
+                                                                            .count >
+                                                                        1) {
+                                                                      cart.updateQuantity(
+                                                                        product
+                                                                            .id,
+                                                                        cart.listItem.firstWhere((element) => element.pId == product.id).count -
+                                                                            1,
+                                                                      );
+                                                                    } else {
+                                                                      cart.removeItem(
+                                                                          product
+                                                                              .id);
+                                                                    }
+                                                                    cart.removeQR(
+                                                                        qrModel
+                                                                            .id);
+                                                                    setState(
+                                                                        () {
+                                                                      load =
+                                                                          true;
+                                                                    });
+                                                                  },
+                                                                  icon: Icon(
+                                                                    Icons
+                                                                        .remove_circle,
+                                                                    color: Colors
+                                                                        .red,
+                                                                    size: 30,
+                                                                  ),
+                                                                )
+                                                              : IconButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    cart.addItem(
+                                                                        product
+                                                                            .id,
+                                                                        1,
+                                                                        product,
+                                                                        double.parse((product.importPrice *
+                                                                                product.ratePrice)
+                                                                            .toStringAsFixed(2)));
+                                                                    cart.addQR(
+                                                                        qrModel
+                                                                            .id);
+                                                                    setState(
+                                                                        () {
+                                                                      load =
+                                                                          true;
+                                                                    });
+                                                                  },
+                                                                  icon: Icon(
+                                                                    Icons
+                                                                        .add_circle,
+                                                                    color:
+                                                                        my_org,
+                                                                    size: 30,
+                                                                  ),
+                                                                ),
+                                                        ),
+                                                      )
+                                                    : SizedBox(),
                                               ],
                                             ),
                                           );

@@ -3,9 +3,9 @@ const { Schema, model } = require('mongoose');
 const orderSchema = new Schema({
     orderDate: { type: Date },
     cusID: { type: String },
-    isConfirm: { type: Boolean },
+    process: { type: Number },// 1:order, 0:rejected, 2:accepted, 3:exported, 4:completed
     totalAmount: { type: Number },
-    // items: [{ type: Array }]
+    description: { type: String },
 },
     {
         timestamps: true

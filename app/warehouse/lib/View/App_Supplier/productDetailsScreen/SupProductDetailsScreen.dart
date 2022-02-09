@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:warehouse/Models/Comment.dart';
+import 'package:warehouse/Models/comment.dart';
 import 'package:warehouse/Models/position.dart';
 import 'package:warehouse/Models/productModel.dart';
 import 'package:warehouse/Models/qrModel.dart';

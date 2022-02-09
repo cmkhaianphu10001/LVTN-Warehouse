@@ -4,7 +4,7 @@ const itemOfOrderSchema = new Schema({
     parentID: { type: String }, //point to order or cart
     productID: { type: String },
     newPrice: { type: Number },
-    quantity: { type: Number },
+    count: { type: Number },
 },
     {
         timestamps: true

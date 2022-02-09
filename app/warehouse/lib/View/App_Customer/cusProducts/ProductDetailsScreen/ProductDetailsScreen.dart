@@ -1,13 +1,15 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:jwt_decode/jwt_decode.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:warehouse/Models/Comment.dart';
+import 'package:warehouse/Models/comment.dart';
 import 'package:warehouse/Models/cart.dart';
 import 'package:warehouse/Models/position.dart';
 import 'package:warehouse/Models/productModel.dart';
 import 'package:warehouse/Models/qrModel.dart';
+import 'package:warehouse/Services/cartDatabase.dart';
 import 'package:warehouse/Services/commentService.dart';
 import 'package:warehouse/Services/productService.dart';
 import 'package:warehouse/Services/profileService.dart';
@@ -36,7 +38,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   _ProductDetailsScreenState(this.product);
   Position position;
 
-  int count = 1;
+  int count = 0;
   String choiceRep = '';
   TextEditingController controller1 = TextEditingController();
   TextEditingController controller2 = TextEditingController();
@@ -235,38 +237,21 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                             height: 10,
                                           ),
                                           GestureDetector(
-                                            onTap: () {
-                                              CartItem item =
-                                                  cart.listItem.firstWhere(
-                                                (element) =>
-                                                    element.pId == product.id,
-                                                orElse: () => null,
-                                              );
-
-                                              if (item != null) {
-                                                if (item.count + count <=
-                                                    product.quantity) {
-                                                  cart.addItem(
-                                                      product.id,
-                                                      count,
-                                                      product,
-                                                      product.importPrice *
-                                                          product.ratePrice);
-                                                  myToast('Done');
-                                                } else {
-                                                  myToast(
-                                                      'Over quantity in Cart.');
-                                                }
+                                            onTap: () async {
+                                              if (count <= 0) {
+                                                myToast(
+                                                    'How many do you want?');
                                               } else {
-                                                cart.addItem(
-                                                    product.id,
-                                                    count,
-                                                    product,
-                                                    product.importPrice *
-                                                        product.ratePrice);
-                                                myToast('Done');
+                                                SharedPreferences pre =
+                                                    await SharedPreferences
+                                                        .getInstance();
+                                                String myID = Jwt.parseJwt(pre
+                                                    .getString('token'))['id'];
+                                                CartDatabase().addItem(
+                                                    myID: myID,
+                                                    product: product,
+                                                    count: count);
                                               }
-                                              log(cart.totalAmount.toString());
                                             },
                                             child: Container(
                                               padding: EdgeInsets.symmetric(

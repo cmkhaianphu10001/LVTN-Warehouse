@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:warehouse/Models/Comment.dart';
+import 'package:warehouse/Models/comment.dart';
 import 'package:warehouse/Models/position.dart';
 import 'package:warehouse/Models/productModel.dart';
 import 'package:warehouse/Services/commentService.dart';
@@ -10,6 +10,7 @@ import 'package:warehouse/Services/positionService.dart';
 import 'package:warehouse/Services/profileService.dart';
 import 'package:warehouse/View/App_Manager/Header.dart';
 import 'package:warehouse/View/App_Manager/ProductsScreen/QRList/QRListScreen.dart';
+import 'package:warehouse/View/App_Manager/exportScreen/ListQRAddExport/ListQRAddExport.dart';
 import 'package:warehouse/View/App_Manager/mngHome/components/Drawer.dart';
 import 'package:warehouse/View/App_Manager/positionScreen/viewStorage/viewStorage.dart';
 import 'package:warehouse/colors.dart';
@@ -215,6 +216,37 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                                     '${product.stored == null ? "" : product.stored}',
                                               ),
                                             ),
+                                          ),
+                                          SizedBox(
+                                            height: 30,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                "Add to cart Export",
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontStyle: FontStyle.italic,
+                                                ),
+                                              ),
+                                              IconButton(
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ListQRAddExport(
+                                                        product: product,
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                                icon: Icon(Icons.next_plan),
+                                                color: my_org,
+                                              )
+                                            ],
                                           ),
                                         ],
                                       ),

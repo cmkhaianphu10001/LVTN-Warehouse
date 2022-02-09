@@ -9,9 +9,10 @@ const { addNewProduct,
 
 const {
     ImportProducts,
+    ExportProducts,
     GetQRs,
     GetQRbyID
-} = require('../Controllers/importController');
+} = require('../Controllers/importExportController');
 
 router.route('/addNewProduct').post(addNewProduct);
 router.route('/getUndealProducts').get(GetUndealProducts);
@@ -22,6 +23,7 @@ router.route('/confirmUndealProduct').post(ConfirmUndealProduct);
 
 //import
 router.route('/importProducts').post(ImportProducts);
+router.route('/exportProducts').post(ExportProducts);
 router.route('/getQRs').get(GetQRs);
 router.route('/getQRByID').get(GetQRbyID);
 

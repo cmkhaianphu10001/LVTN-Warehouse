@@ -23,6 +23,12 @@ class Cart extends ChangeNotifier {
     return {..._items};
   }
 
+  Map<String, String> _qrList = {};
+
+  Map<String, String> get qrList {
+    return {..._qrList};
+  }
+
   int get itemCount {
     return _items.length;
   }
@@ -51,8 +57,20 @@ class Cart extends ChangeNotifier {
     notifyListeners();
   }
 
+  void addQR(String qrID) {
+    if (!_qrList.containsKey(qrID)) {
+      _qrList.putIfAbsent(qrID, () => qrID);
+    }
+    notifyListeners();
+  }
+
   void removeItem(String id) {
     _items.remove(id);
+    notifyListeners();
+  }
+
+  void removeQR(String id) {
+    _qrList.remove(id);
     notifyListeners();
   }
 
@@ -88,8 +106,17 @@ class Cart extends ChangeNotifier {
     return list;
   }
 
+  List<String> get listQR {
+    List<String> list = [];
+    _qrList.forEach((key, value) {
+      list.add(value);
+    });
+    return list;
+  }
+
   void clear() {
     _items = {};
+    _qrList = {};
     notifyListeners();
   }
 }
@@ -111,13 +138,13 @@ class Export {
   Export({
     this.customer,
     this.date,
-    this.totalPrice,
+    this.totalAmount,
     this.listProduct,
-    this.listQR,
+    this.listQRID,
   });
   final User customer;
   final DateTime date;
-  final double totalPrice;
+  final double totalAmount;
   final List<CartItem> listProduct;
-  final List<QRModel> listQR;
+  final List<String> listQRID;
 }

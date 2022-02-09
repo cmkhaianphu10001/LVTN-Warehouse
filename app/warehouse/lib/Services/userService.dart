@@ -61,4 +61,12 @@ class UserService {
       log(e);
     }
   }
+
+  getCustomer(String token) async {
+    List<User> users = await getUser(token);
+
+    List<User> listCustomer =
+        users.where((element) => element.role == 'customer').toList();
+    return listCustomer;
+  }
 }

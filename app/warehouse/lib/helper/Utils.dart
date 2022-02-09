@@ -103,3 +103,40 @@ getRoomId(User a, User b) {
   if (a.role != 'manager') return '${a.id}_manager';
   if (b.role != 'manager') return '${b.id}_manager';
 }
+
+getProcess(int process) {
+  switch (process) {
+    case 0:
+      return 'Denie';
+      break;
+    case 1:
+      return 'Checking';
+      break;
+    case 2:
+      return 'Accept';
+      break;
+    case 3:
+      return 'Exported';
+      break;
+    case 4:
+      return 'Completed';
+      break;
+    default:
+  }
+}
+
+bool compare2Json(Map<String, dynamic> json1, Map<String, dynamic> json2) {
+  if (json1.length != json2.length) {
+    return false;
+  }
+  json1.forEach((key1, value1) {
+    json2.forEach((key2, value2) {
+      if (key1 == key2) {
+        if (value1 != value2) {
+          return false;
+        }
+      }
+    });
+  });
+  return true;
+}

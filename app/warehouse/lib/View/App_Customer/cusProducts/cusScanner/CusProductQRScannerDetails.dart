@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:warehouse/Models/Comment.dart';
+import 'package:warehouse/Models/comment.dart';
 import 'package:warehouse/Models/position.dart';
 import 'package:warehouse/Models/productModel.dart';
 import 'package:warehouse/Models/qrModel.dart';
@@ -320,7 +320,6 @@ class _CusProductDetailsWithQRState extends State<CusProductDetailsWithQR> {
                                                 'import: ${qrModel.importDate.year} - ${qrModel.importDate.month} - ${qrModel.importDate.day}',
                                                 style: TextStyle(fontSize: 12),
                                               ),
-                                              Text('\$${product.importPrice}'),
                                               Text(
                                                   '${users.firstWhere((element) => element.id == qrModel.managerIDImport).name}'),
                                             ],
@@ -344,10 +343,6 @@ class _CusProductDetailsWithQRState extends State<CusProductDetailsWithQR> {
                                                             style: TextStyle(
                                                                 fontSize: 12),
                                                           )
-                                                        : Text('${null}'),
-                                                    qrModel.cusID != null
-                                                        ? Text(
-                                                            '\$${product.importPrice * product.ratePrice}')
                                                         : Text('${null}'),
                                                     Text(
                                                         // 'ManagerExportName'),

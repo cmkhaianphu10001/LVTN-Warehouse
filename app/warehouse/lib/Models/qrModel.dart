@@ -7,7 +7,9 @@ class QRModel {
   DateTime exportDate;
   String managerIDExport;
   double exportPrice;
-  String locationID;
+
+  String importIDhistory;
+  String exportIDhistory;
 
   QRModel({
     this.id,
@@ -18,7 +20,8 @@ class QRModel {
     this.exportDate,
     this.managerIDExport,
     this.exportPrice,
-    this.locationID,
+    this.importIDhistory,
+    this.exportIDhistory,
   });
   // DateTime date = new DateTime()
   QRModel.fromJson(Map<String, dynamic> json)
@@ -36,7 +39,8 @@ class QRModel {
         exportPrice = json['exportPrice'] != null
             ? double.parse(json['exportPrice'].toString())
             : null,
-        locationID = json['locationID'] ?? null;
+        importIDhistory = json['importIDhistory'] ?? null,
+        exportIDhistory = json['exportIDhistory'] ?? null;
 
   Map<String, dynamic> toJson() => {
         '_id': id,
@@ -47,6 +51,7 @@ class QRModel {
         'exportDate': exportDate,
         'managerIDExport': managerIDExport,
         'exportPrice': exportPrice,
-        'locationID': locationID,
+        'importIDhistory': importIDhistory,
+        'exportIDhistory': exportIDhistory,
       };
 }

@@ -3,16 +3,16 @@ const express = require('express');
 const router = express.Router();
 
 const {
-    UpdateCart,
     AddOrder,
-    ConfirmOrder,
+    DeleteOrder,
+    ChangeStateOrder,
     GetOrders,
     GetItemsOfOrder
 } = require('../Controllers/orderController');
 
-router.route('/updateCart').post(UpdateCart);
 router.route('/addOrder').post(AddOrder);
-router.route('/confirmOrder').post(ConfirmOrder);
+router.route('/deleteOrder').post(DeleteOrder);
+router.route('/changeStateOrder').post(ChangeStateOrder);
 router.route('/getOrders').get(GetOrders);
 router.route('/getItemsOfOrder').get(GetItemsOfOrder);
 

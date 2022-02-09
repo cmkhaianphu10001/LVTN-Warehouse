@@ -220,6 +220,42 @@ class ProductService {
     }
   }
 
+  exportProduct(String token, Export export) async {
+    var listItem = [];
+    var listQR = [];
+    export.listProduct.forEach((e) {
+      listItem.add({
+        "productID": e.product.id,
+        "quantity": e.count,
+        "newPrice": e.newPrice
+      });
+    });
+    export.listQRID.forEach((element) {
+      listQR.add({'qrID': element});
+    });
+    try {
+      var res = await http.post(
+        Uri.parse(url + 'exportProducts'),
+        headers: {
+          "content-type": "application/json",
+          "authorization": token,
+        },
+        body: jsonEncode({
+          'cusID': export.customer.id,
+          'exportDate':
+              "${export.date.year}-${export.date.month}-${export.date.day}",
+          'totalAmount': export.totalAmount,
+          'listItem': listItem,
+          'listQR': listQR,
+        }),
+      );
+
+      return res;
+    } catch (e) {
+      print(e);
+    }
+  }
+
   getQRbyId(String token, String qrID) async {
     try {
       var res = await http.get(

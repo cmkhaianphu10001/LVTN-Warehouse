@@ -2,8 +2,8 @@ const JWT = require('jsonwebtoken');
 const { User } = require('../Model/user');
 const { QR } = require('../Model/QR');
 const { Product } = require('../Model/product');
-const multerHandle = require('./multerHandle');
-const fs = require('fs');
+const { History } = require('../Model/history');
+const { ItemOfHistory } = require('../Model/itemOfHistory');
 
 //import product
 // {
@@ -38,18 +38,35 @@ module.exports.ImportProducts = async (req, res) => {
             try {
                 console.log('import product');
                 console.log(req.body);
+                const historyImport = new History({
+                    typeHistory: 'import',
+                    date: new Date(req.body.importDate),
+                    userTargetID: req.body.supID,
+                    managerID: user._id,
+                    totalAmount: req.body.totalAmount,
+                });
+                historyImport.save();
                 for (const e of req.body.listItem) {
                     var product = await Product.findById(e.productID);
+                    const itemOfHistory = new ItemOfHistory({
+                        parentID: historyImport._id,
+                        productID: product._id,
+                        count: e.quantity,
+                    });
+                    itemOfHistory.save();
+
+
                     for (let index = 0; index < e.quantity; index++) {
                         const qr = new QR({
                             productID: e.productID,
                             importDate: new Date(req.body.importDate),
                             managerIDImport: user._id,
+                            importIDhistory: historyImport._id,
                             cusID: null,
                             exportDate: null,
                             managerIDExport: null,
-                            exportPrice: null,
-                            locationID: null,
+                            exportPrice: product.importPrice * product.ratePrice,
+                            exportIDhistory: null,
                         });
                         qr.save();
                         listQRres.push({
@@ -65,6 +82,85 @@ module.exports.ImportProducts = async (req, res) => {
             } catch (e) {
                 console.log(e);
             }
+        } else {
+            return res.status(400).send('not permission!!')
+        }
+    } else {
+        return res.status(400).send('Wrong token, please login');
+    }
+}
+
+
+
+// {
+//     cusID: '61e9430aee9fa3d1956f25e8',
+//     exportDate: '2022-2-9',
+//     totalAmount: 4320,
+//     listItem: [
+//       {
+//         productID: '61f2a604ca5b3a43d4c5d479',
+//         quantity: 2,
+//         newPrice: 1440
+//       },
+//       {
+//         productID: '61f2a63bca5b3a43d4c5d49f',
+//         quantity: 1,
+//         newPrice: 1440
+//       }
+//     ],
+//     listQR: [
+//       { qrID: '6203d47423d303b39171a84f' },
+//       { qrID: '6203d47423d303b39171a850' },
+//       { qrID: '6203dc4f23d303b39171a8a3' }
+//     ]
+//   }
+module.exports.ExportProducts = async (req, res) => {
+    var token = req.headers['authorization'];
+
+    if (JWT.verify(token, process.env.JWTSecret)) {
+        var decodeToken = JWT.decode(token, process.env.JWTSecret);
+
+        var user = await User.findOne({
+            email: decodeToken.email,
+        });
+
+        if (user != null && user.role == 'manager') {
+            try {
+                console.log('import product');
+                console.log(req.body);
+                const historyExport = new History({
+                    typeHistory: 'export',
+                    date: new Date(req.body.exportDate),
+                    userTargetID: req.body.cusID,
+                    managerID: user._id,
+                    totalAmount: req.body.totalAmount,
+                });
+                historyExport.save();
+                for (const e of req.body.listItem) {
+                    var product = await Product.findById(e.productID);
+                    const itemOfHistory = new ItemOfHistory({
+                        parentID: historyExport._id,
+                        productID: product._id,
+                        count: e.quantity,
+                    });
+                    itemOfHistory.save();
+                    product.quantity -= e.quantity;
+                    product.save();
+                }
+                for (const e of req.body.listQR) {
+                    var qr = await QR.findByIdAndUpdate(e.qrID, {
+                        cusID: req.body.cusID,
+                        exportDate: new Date(req.body.exportDate),
+                        managerIDExport: user._id,
+                        exportIDhistory: historyExport._id,
+                    });
+                    qr.save();
+                }
+                return res.status(200).send('Exported');
+            } catch (e) {
+                console.log(e);
+            }
+
         } else {
             return res.status(400).send('not permission!!')
         }
