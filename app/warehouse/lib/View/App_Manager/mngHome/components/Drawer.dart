@@ -80,11 +80,10 @@ class MyDrawer extends StatelessWidget {
               ),
             ),
             onTap: () {
-              Navigator.pushAndRemoveUntil(
+              Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => UndealProductScreen()),
-                  (route) => false);
+                      builder: (context) => UndealProductScreen()));
             },
           ),
           Container(height: 1, width: size.width, color: Colors.grey),
@@ -97,10 +96,10 @@ class MyDrawer extends StatelessWidget {
               ),
             ),
             onTap: () {
-              Navigator.pushAndRemoveUntil(
+              Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => RequestAccountList()),
-                  (route) => false);
+                  MaterialPageRoute(
+                      builder: (context) => RequestAccountList()));
             },
           ),
           Container(height: 1, width: size.width, color: Colors.grey),

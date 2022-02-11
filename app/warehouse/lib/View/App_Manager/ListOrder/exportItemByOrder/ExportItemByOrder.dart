@@ -20,20 +20,23 @@ import 'package:warehouse/helper/Utils.dart';
 import 'package:warehouse/helper/actionToFile.dart';
 
 class ExportItemByOrder extends StatefulWidget {
-  const ExportItemByOrder({Key key, @required this.orderModel})
+  const ExportItemByOrder(
+      {Key key, @required this.orderModel, @required this.customer})
       : super(key: key);
   final OrderModel orderModel;
+  final User customer;
 
   @override
-  _ExportItemByOrderState createState() => _ExportItemByOrderState(orderModel);
+  _ExportItemByOrderState createState() =>
+      _ExportItemByOrderState(orderModel, customer);
 }
 
 class _ExportItemByOrderState extends State<ExportItemByOrder> {
   final OrderModel orderModel;
-  _ExportItemByOrderState(this.orderModel);
+  _ExportItemByOrderState(this.orderModel, this.customer);
 
   bool load = false;
-  User customer;
+  final User customer;
 
   TextEditingController description = new TextEditingController();
 
@@ -41,6 +44,12 @@ class _ExportItemByOrderState extends State<ExportItemByOrder> {
     SharedPreferences pre = await SharedPreferences.getInstance();
     return await ProfileServices()
         .getUserById(pre.getString('token'), customerID);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    log(customer.id);
   }
 
   @override
@@ -316,52 +325,42 @@ class _ExportItemByOrderState extends State<ExportItemByOrder> {
                             ],
                           ),
                         ),
-                        FutureBuilder(
-                          future: getCustomer(orderModel.cusID),
-                          builder: (context, snapshot) {
-                            if (snapshot.data != null) {
-                              customer = snapshot.data;
-                              return Container(
-                                color: Colors.white,
-                                padding: EdgeInsets.all(20),
-                                margin: EdgeInsets.symmetric(vertical: 10),
-                                child: Row(
+                        Container(
+                          color: Colors.white,
+                          padding: EdgeInsets.all(20),
+                          margin: EdgeInsets.symmetric(vertical: 10),
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(
+                                flex: 1,
+                                child: CircleAvatar(
+                                  backgroundImage: NetworkImage(
+                                    getdownloadUriFromDB(customer.image),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 8,
+                                child: Column(
                                   children: <Widget>[
-                                    Expanded(
-                                      flex: 1,
-                                      child: CircleAvatar(
-                                        backgroundImage: NetworkImage(
-                                          getdownloadUriFromDB(customer.image),
-                                        ),
+                                    Text(
+                                      '${customer.name}',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
                                       ),
                                     ),
-                                    Expanded(
-                                      flex: 8,
-                                      child: Column(
-                                        children: <Widget>[
-                                          Text(
-                                            '${customer.name}',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20,
-                                            ),
-                                          ),
-                                          Text(
-                                            '${customer.email}',
-                                            style: TextStyle(
-                                              fontStyle: FontStyle.italic,
-                                            ),
-                                          )
-                                        ],
+                                    Text(
+                                      '${customer.email}',
+                                      style: TextStyle(
+                                        fontStyle: FontStyle.italic,
                                       ),
                                     )
                                   ],
                                 ),
-                              );
-                            } else {
-                              return MyLoading();
-                            }
-                          },
+                              )
+                            ],
+                          ),
                         ),
                         Container(
                             margin: EdgeInsets.symmetric(vertical: 10),

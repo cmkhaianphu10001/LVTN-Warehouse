@@ -215,7 +215,7 @@ class _ListQRAddExportState extends State<ListQRAddExport> {
                                                                     qrs[index].cusID !=
                                                                             null
                                                                         ? Text(
-                                                                            'export: ${qrs[index].importDate.year} - ${qrs[index].importDate.month} - ${qrs[index].importDate.day}',
+                                                                            'export: ${qrs[index].exportDate.year} - ${qrs[index].exportDate.month} - ${qrs[index].exportDate.day}',
                                                                             style:
                                                                                 TextStyle(fontSize: 12),
                                                                           )
@@ -224,7 +224,7 @@ class _ListQRAddExportState extends State<ListQRAddExport> {
                                                                     qrs[index].cusID !=
                                                                             null
                                                                         ? Text(
-                                                                            '\$${product.importPrice * product.ratePrice}')
+                                                                            '\$${qrs[index].exportPrice}')
                                                                         : Text(
                                                                             '${null}'),
                                                                     Text(

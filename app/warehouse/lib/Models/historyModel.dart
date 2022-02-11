@@ -1,3 +1,4 @@
+import 'package:warehouse/Models/productModel.dart';
 import 'package:warehouse/Models/qrModel.dart';
 
 class HistoryModel {
@@ -33,6 +34,7 @@ class ItemOfHistory {
   String productID;
   int count;
   List<QRModel> qrs;
+  Product product;
 
   ItemOfHistory({
     this.id,
@@ -40,6 +42,7 @@ class ItemOfHistory {
     this.productID,
     this.count,
     this.qrs,
+    this.product,
   });
 
   ItemOfHistory.fromJson(Map<String, dynamic> json)

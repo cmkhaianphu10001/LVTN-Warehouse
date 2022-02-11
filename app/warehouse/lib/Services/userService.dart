@@ -63,10 +63,20 @@ class UserService {
   }
 
   getCustomer(String token) async {
-    List<User> users = await getUser(token);
-
-    List<User> listCustomer =
-        users.where((element) => element.role == 'customer').toList();
-    return listCustomer;
+    var postUri = Uri.parse(url + 'getcustomer');
+    try {
+      var res = await http.get(
+        postUri,
+        headers: {
+          "content-type": "application/json",
+          "authorization": token,
+        },
+      );
+      List<User> listCustomer =
+          (jsonDecode(res.body) as List).map((e) => User.fromJson(e)).toList();
+      return listCustomer;
+    } catch (e) {
+      log(e.message);
+    }
   }
 }

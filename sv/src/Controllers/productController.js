@@ -184,6 +184,7 @@ module.exports.ConfirmUndealProduct = async (req, res) => {
                         image: unDealProduct.image || null,//nullable
                         description: unDealProduct.description || '',//nullable
                         stored: null,//nullable
+                        sold: 0,
                     });
                     console.log('5')
 

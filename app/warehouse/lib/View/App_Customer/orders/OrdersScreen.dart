@@ -54,177 +54,192 @@ class _OrdersScreenState extends State<OrdersScreen> {
                         fontWeight: FontWeight.bold),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            countProcess = 0;
-                          });
-                        },
-                        child: AnimatedContainer(
-                          duration: Duration(milliseconds: 200),
-                          padding: EdgeInsets.symmetric(
-                              vertical: 20, horizontal: 10),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.white,
-                              boxShadow: countProcess == 0
-                                  ? [
-                                      BoxShadow(
-                                        color: Colors.grey,
-                                        blurRadius: 15,
-                                        offset: Offset(3, 3),
-                                      ),
-                                      BoxShadow(
-                                        color: Colors.white,
-                                        blurRadius: 15,
-                                        offset: Offset(-4, -4),
-                                      ),
-                                    ]
-                                  : null),
-                          child: Text(
-                            'Denie',
-                            style: TextStyle(color: my_org),
+                Container(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(20),
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              countProcess = 0;
+                            });
+                          },
+                          child: AnimatedContainer(
+                            duration: Duration(milliseconds: 200),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 20, horizontal: 10),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white,
+                                boxShadow: countProcess == 0
+                                    ? [
+                                        BoxShadow(
+                                          color: Colors.grey,
+                                          blurRadius: 15,
+                                          offset: Offset(3, 3),
+                                        ),
+                                        BoxShadow(
+                                          color: Colors.white,
+                                          blurRadius: 15,
+                                          offset: Offset(-4, -4),
+                                        ),
+                                      ]
+                                    : null),
+                            child: Text(
+                              'Denie',
+                              style: TextStyle(color: my_org),
+                            ),
                           ),
                         ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            countProcess = 1;
-                          });
-                        },
-                        child: AnimatedContainer(
-                          duration: Duration(milliseconds: 200),
-                          padding: EdgeInsets.symmetric(
-                              vertical: 20, horizontal: 10),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.white,
-                              boxShadow: countProcess == 1
-                                  ? [
-                                      BoxShadow(
-                                        color: Colors.grey,
-                                        blurRadius: 15,
-                                        offset: Offset(3, 3),
-                                      ),
-                                      BoxShadow(
-                                        color: Colors.white,
-                                        blurRadius: 15,
-                                        offset: Offset(-4, -4),
-                                      ),
-                                    ]
-                                  : null),
-                          child: Text(
-                            'Checking',
-                            style: TextStyle(color: my_org),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              countProcess = 1;
+                            });
+                          },
+                          child: AnimatedContainer(
+                            duration: Duration(milliseconds: 200),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 20, horizontal: 10),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white,
+                                boxShadow: countProcess == 1
+                                    ? [
+                                        BoxShadow(
+                                          color: Colors.grey,
+                                          blurRadius: 15,
+                                          offset: Offset(3, 3),
+                                        ),
+                                        BoxShadow(
+                                          color: Colors.white,
+                                          blurRadius: 15,
+                                          offset: Offset(-4, -4),
+                                        ),
+                                      ]
+                                    : null),
+                            child: Text(
+                              'Checking',
+                              style: TextStyle(color: my_org),
+                            ),
                           ),
                         ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            countProcess = 2;
-                          });
-                        },
-                        child: AnimatedContainer(
-                          duration: Duration(milliseconds: 200),
-                          padding: EdgeInsets.symmetric(
-                              vertical: 20, horizontal: 10),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.white,
-                              boxShadow: countProcess == 2
-                                  ? [
-                                      BoxShadow(
-                                        color: Colors.grey,
-                                        blurRadius: 15,
-                                        offset: Offset(3, 3),
-                                      ),
-                                      BoxShadow(
-                                        color: Colors.white,
-                                        blurRadius: 15,
-                                        offset: Offset(-4, -4),
-                                      ),
-                                    ]
-                                  : null),
-                          child: Text(
-                            'Accepted',
-                            style: TextStyle(color: my_org),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              countProcess = 2;
+                            });
+                          },
+                          child: AnimatedContainer(
+                            duration: Duration(milliseconds: 200),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 20, horizontal: 10),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white,
+                                boxShadow: countProcess == 2
+                                    ? [
+                                        BoxShadow(
+                                          color: Colors.grey,
+                                          blurRadius: 15,
+                                          offset: Offset(3, 3),
+                                        ),
+                                        BoxShadow(
+                                          color: Colors.white,
+                                          blurRadius: 15,
+                                          offset: Offset(-4, -4),
+                                        ),
+                                      ]
+                                    : null),
+                            child: Text(
+                              'Accepted',
+                              style: TextStyle(color: my_org),
+                            ),
                           ),
                         ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            countProcess = 3;
-                          });
-                        },
-                        child: AnimatedContainer(
-                          duration: Duration(milliseconds: 200),
-                          padding: EdgeInsets.symmetric(
-                              vertical: 20, horizontal: 10),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.white,
-                              boxShadow: countProcess == 3
-                                  ? [
-                                      BoxShadow(
-                                        color: Colors.grey,
-                                        blurRadius: 15,
-                                        offset: Offset(3, 3),
-                                      ),
-                                      BoxShadow(
-                                        color: Colors.white,
-                                        blurRadius: 15,
-                                        offset: Offset(-4, -4),
-                                      ),
-                                    ]
-                                  : null),
-                          child: Text(
-                            'Exported',
-                            style: TextStyle(color: my_org),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              countProcess = 3;
+                            });
+                          },
+                          child: AnimatedContainer(
+                            duration: Duration(milliseconds: 200),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 20, horizontal: 10),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white,
+                                boxShadow: countProcess == 3
+                                    ? [
+                                        BoxShadow(
+                                          color: Colors.grey,
+                                          blurRadius: 15,
+                                          offset: Offset(3, 3),
+                                        ),
+                                        BoxShadow(
+                                          color: Colors.white,
+                                          blurRadius: 15,
+                                          offset: Offset(-4, -4),
+                                        ),
+                                      ]
+                                    : null),
+                            child: Text(
+                              'Exported',
+                              style: TextStyle(color: my_org),
+                            ),
                           ),
                         ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            countProcess = 4;
-                          });
-                        },
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
-                          padding: EdgeInsets.symmetric(
-                              vertical: 20, horizontal: 10),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.white,
-                              boxShadow: countProcess == 4
-                                  ? [
-                                      BoxShadow(
-                                        color: Colors.grey,
-                                        blurRadius: 15,
-                                        offset: Offset(3, 3),
-                                      ),
-                                      BoxShadow(
-                                        color: Colors.white,
-                                        blurRadius: 15,
-                                        offset: Offset(-4, -4),
-                                      ),
-                                    ]
-                                  : null),
-                          child: Text(
-                            'Completed',
-                            style: TextStyle(color: my_org),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              countProcess = 4;
+                            });
+                          },
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 20, horizontal: 10),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white,
+                                boxShadow: countProcess == 4
+                                    ? [
+                                        BoxShadow(
+                                          color: Colors.grey,
+                                          blurRadius: 15,
+                                          offset: Offset(3, 3),
+                                        ),
+                                        BoxShadow(
+                                          color: Colors.white,
+                                          blurRadius: 15,
+                                          offset: Offset(-4, -4),
+                                        ),
+                                      ]
+                                    : null),
+                            child: Text(
+                              'Completed',
+                              style: TextStyle(color: my_org),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
                 Expanded(

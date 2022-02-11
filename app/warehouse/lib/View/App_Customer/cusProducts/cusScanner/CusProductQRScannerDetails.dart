@@ -127,7 +127,7 @@ class _CusProductDetailsWithQRState extends State<CusProductDetailsWithQR> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Text(
-                                      "Price: \$${product.importPrice * product.ratePrice}",
+                                      "Price: \$${(product.importPrice * product.ratePrice).toStringAsFixed(2)}",
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontStyle: FontStyle.italic,
@@ -339,7 +339,7 @@ class _CusProductDetailsWithQRState extends State<CusProductDetailsWithQR> {
                                                   children: [
                                                     qrModel.cusID != null
                                                         ? Text(
-                                                            'export: ${qrModel.importDate.year} - ${qrModel.importDate.month} - ${qrModel.importDate.day}',
+                                                            'export: ${qrModel.exportDate.year} - ${qrModel.exportDate.month} - ${qrModel.exportDate.day}',
                                                             style: TextStyle(
                                                                 fontSize: 12),
                                                           )

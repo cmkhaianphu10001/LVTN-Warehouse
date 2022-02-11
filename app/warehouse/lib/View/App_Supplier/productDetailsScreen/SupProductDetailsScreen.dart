@@ -128,7 +128,7 @@ class _SupplierProductDetailsScreenState
                                             CrossAxisAlignment.start,
                                         children: <Widget>[
                                           Text(
-                                            "Price: \$${product.importPrice * product.ratePrice}",
+                                            "Price: \$${(product.importPrice * product.ratePrice).toStringAsFixed(2)}",
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontStyle: FontStyle.italic,

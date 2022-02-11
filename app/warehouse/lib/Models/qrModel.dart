@@ -37,7 +37,8 @@ class QRModel {
             : null,
         managerIDExport = json['managerIDExport'] ?? null,
         exportPrice = json['exportPrice'] != null
-            ? double.parse(json['exportPrice'].toString())
+            ? double.parse(
+                double.parse(json['exportPrice'].toString()).toStringAsFixed(2))
             : null,
         importIDhistory = json['importIDhistory'] ?? null,
         exportIDhistory = json['exportIDhistory'] ?? null;

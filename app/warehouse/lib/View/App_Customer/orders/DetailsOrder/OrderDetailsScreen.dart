@@ -323,7 +323,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                                         },
                                         text: 'Took Deliveries',
                                         toastText: 'Please wait',
-                                      ))
+                                      ),
+                                    )
                                   : Container(),
                             ],
                           ),

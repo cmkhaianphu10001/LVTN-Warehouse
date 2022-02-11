@@ -40,7 +40,7 @@ module.exports.ImportProducts = async (req, res) => {
                 console.log(req.body);
                 const historyImport = new History({
                     typeHistory: 'import',
-                    date: new Date(req.body.importDate),
+                    date: new Date(req.body.importDate).toLocaleString("en-US", { timeZone: 'Asia/Jakarta' }),
                     userTargetID: req.body.supID,
                     managerID: user._id,
                     totalAmount: req.body.totalAmount,
@@ -59,13 +59,13 @@ module.exports.ImportProducts = async (req, res) => {
                     for (let index = 0; index < e.quantity; index++) {
                         const qr = new QR({
                             productID: e.productID,
-                            importDate: new Date(req.body.importDate),
+                            importDate: new Date(req.body.importDate).toLocaleString("en-US", { timeZone: 'Asia/Jakarta' }),
                             managerIDImport: user._id,
                             importIDhistory: historyImport._id,
                             cusID: null,
                             exportDate: null,
                             managerIDExport: null,
-                            exportPrice: product.importPrice * product.ratePrice,
+                            exportPrice: parseFloat((product.importPrice * product.ratePrice).toString()).toFixed(2),
                             exportIDhistory: null,
                         });
                         qr.save();
@@ -116,7 +116,6 @@ module.exports.ImportProducts = async (req, res) => {
 //   }
 module.exports.ExportProducts = async (req, res) => {
     var token = req.headers['authorization'];
-
     if (JWT.verify(token, process.env.JWTSecret)) {
         var decodeToken = JWT.decode(token, process.env.JWTSecret);
 
@@ -126,11 +125,11 @@ module.exports.ExportProducts = async (req, res) => {
 
         if (user != null && user.role == 'manager') {
             try {
-                console.log('import product');
+                console.log('export product');
                 console.log(req.body);
                 const historyExport = new History({
                     typeHistory: 'export',
-                    date: new Date(req.body.exportDate),
+                    date: new Date(req.body.exportDate).toLocaleString("en-US", { timeZone: 'Asia/Jakarta' }),
                     userTargetID: req.body.cusID,
                     managerID: user._id,
                     totalAmount: req.body.totalAmount,
@@ -145,12 +144,13 @@ module.exports.ExportProducts = async (req, res) => {
                     });
                     itemOfHistory.save();
                     product.quantity -= e.quantity;
+                    product.sold += e.quantity;
                     product.save();
                 }
                 for (const e of req.body.listQR) {
                     var qr = await QR.findByIdAndUpdate(e.qrID, {
                         cusID: req.body.cusID,
-                        exportDate: new Date(req.body.exportDate),
+                        exportDate: new Date(req.body.exportDate).toLocaleString("en-US", { timeZone: 'Asia/Jakarta' }),
                         managerIDExport: user._id,
                         exportIDhistory: historyExport._id,
                     });
@@ -220,6 +220,61 @@ module.exports.GetQRbyID = async (req, res) => {
             } catch (e) {
                 console.log(e);
             }
+        } else {
+            return res.status(400).send('not permission!!')
+        }
+    } else {
+        return res.status(400).send('Wrong token, please login');
+    }
+}
+
+module.exports.GetHistories = async (req, res) => {
+    console.log('GetHistories');
+    var token = req.headers['authorization'];
+    var userTargetID = req.headers['usertargetid']
+    if (JWT.verify(token, process.env.JWTSecret)) {
+        var decodeToken = JWT.decode(token, process.env.JWTSecret);
+        var result;
+        var user = await User.findOne({
+            email: decodeToken.email,
+        });
+        if (user != null) {
+            if (userTargetID != null) {
+                result = await History.find({
+                    userTargetID: userTargetID,
+                });
+            } else {
+                result = await History.find({});
+            }
+            // console.log(result)
+            return res.status(200).json(result);
+        } else {
+            return res.status(400).send('not permission!!')
+        }
+    } else {
+        return res.status(400).send('Wrong token, please login');
+    }
+}
+
+module.exports.GetItemOfHistory = async (req, res) => {
+    console.log('GetItemOfHistory');
+    var token = req.headers['authorization'];
+    var parentID = req.headers['parentID']
+    if (JWT.verify(token, process.env.JWTSecret)) {
+        var decodeToken = JWT.decode(token, process.env.JWTSecret);
+        var result;
+        var user = await User.findOne({
+            email: decodeToken.email,
+        });
+        if (user != null) {
+            if (parentID != null) {
+                result = await ItemOfHistory.find({
+                    parentID: parentID,
+                });
+            } else {
+                result = await ItemOfHistory.find({});
+            }
+            return res.status(200).json(result);
         } else {
             return res.status(400).send('not permission!!')
         }

@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:warehouse/Models/productModel.dart';
+import 'package:warehouse/Services/productService.dart';
+
 import 'package:warehouse/View/App_Manager/Header.dart';
 import 'package:warehouse/View/App_Manager/ProductsScreen/ProductsScreen.dart';
+import 'package:warehouse/View/App_Manager/ProductsScreen/productDetail/productDetailScreen.dart';
+import 'package:warehouse/View/App_Manager/Report/ReportScreen.dart';
 import 'package:warehouse/View/App_Manager/exportScreen/ExportScreen.dart';
 import 'package:warehouse/View/App_Manager/importScreen/ImportScreen.dart';
+import 'package:warehouse/View/App_Manager/mngHistory/MngHistory.dart';
 import 'package:warehouse/View/Message/ListChannel/ListChannel.dart';
+import 'package:warehouse/components/loading_view.dart';
 import 'package:warehouse/helper/my_icons_icons.dart';
 import 'package:warehouse/colors.dart';
 
@@ -53,10 +61,7 @@ class _BodyState extends State<Body> {
                     ),
                     //listview
                     Container(height: 1, width: size.width, color: Colors.grey),
-                    Container(
-                      height: size.height * 1 / 8,
-                      // color: Colors.amber,
-                    ),
+                    _listHotSale(),
                     Container(height: 1, width: size.width, color: Colors.grey),
                     SizedBox(
                       height: 10,
@@ -233,7 +238,13 @@ class _BodyState extends State<Body> {
                           id: 7,
                           focus: focus,
                           label: 'Report',
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ReportScreen(),
+                                ));
+                          },
                           onTapDown: (v) async {
                             setState(() {
                               focus = 7;
@@ -252,7 +263,14 @@ class _BodyState extends State<Body> {
                           id: 8,
                           focus: focus,
                           label: 'History',
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      ManagerHistoriesScreen(),
+                                ));
+                          },
                           onTapDown: (v) async {
                             setState(() {
                               focus = 8;
@@ -270,6 +288,7 @@ class _BodyState extends State<Body> {
                       height: 20,
                     ),
                     Container(height: 1, width: size.width, color: Colors.grey),
+                    Expanded(child: _listBottom())
                   ],
                 ),
               ),
@@ -277,6 +296,75 @@ class _BodyState extends State<Body> {
           ),
         ],
       ),
+    );
+  }
+
+  Future getData() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    List<Product> products =
+        await ProductService().getProducts(preferences.getString('token'));
+    return products;
+  }
+
+  _listHotSale() {
+    return FutureBuilder(
+      future: getData(),
+      builder: (context, snapshot) {
+        if (snapshot.data != null) {
+          List<Product> products = snapshot.data;
+          products.sort((Product a, Product b) => b.sold.compareTo(a.sold));
+          List<Product> hotSale = products.take(5).toList();
+          return Container(
+            height: 150,
+            child: ListView.builder(
+              itemCount: hotSale.length,
+              scrollDirection: Axis.horizontal,
+              shrinkWrap: true,
+              padding: EdgeInsets.symmetric(
+                vertical: 5,
+              ),
+              itemBuilder: (context, index) {
+                return Container(
+                  height: 150,
+                  width: 150,
+                  child: FittedBox(
+                    fit: BoxFit.contain,
+                    child: ItemCard(
+                      product: hotSale[index],
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProductDetailsScreen(
+                                product: hotSale[index],
+                              ),
+                            ));
+                      },
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        } else {
+          return MyLoading();
+        }
+      },
+    );
+  }
+
+  _listBottom() {
+    return FutureBuilder(
+      builder: (context, snapshot) {
+        if (snapshot.data != null) {
+          return Container(
+            height: 50,
+            color: Colors.red,
+          );
+        } else {
+          return MyLoading();
+        }
+      },
     );
   }
 }

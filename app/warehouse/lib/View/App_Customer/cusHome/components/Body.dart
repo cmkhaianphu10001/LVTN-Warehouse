@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:warehouse/Models/productModel.dart';
 import 'package:warehouse/Models/userModel.dart';
+import 'package:warehouse/Services/productService.dart';
 import 'package:warehouse/Services/userService.dart';
 import 'package:warehouse/View/App_Customer/Cart/CartScreen.dart';
+import 'package:warehouse/View/App_Customer/cusProducts/ProductDetailsScreen/ProductDetailsScreen.dart';
 import 'package:warehouse/View/App_Customer/cusProducts/ProductsScreen.dart';
 import 'package:warehouse/View/App_Customer/customer_header.dart';
 import 'package:warehouse/View/App_Customer/orders/OrdersScreen.dart';
@@ -76,10 +79,7 @@ class _BodyState extends State<Body> {
                                 height: 1,
                                 width: size.width,
                                 color: Colors.grey),
-                            Container(
-                              height: size.height * 1 / 8,
-                              // color: Colors.amber,
-                            ),
+                            _listHotSale(),
                             Container(
                                 height: 1,
                                 width: size.width,
@@ -280,5 +280,59 @@ class _BodyState extends State<Body> {
             return MyLoading();
           }
         });
+  }
+
+  Future getData() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    List<Product> products =
+        await ProductService().getProducts(preferences.getString('token'));
+    return products;
+  }
+
+  _listHotSale() {
+    return FutureBuilder(
+      future: getData(),
+      builder: (context, snapshot) {
+        if (snapshot.data != null) {
+          List<Product> products = snapshot.data;
+          products.sort((Product a, Product b) => b.sold.compareTo(a.sold));
+          List<Product> hotSale = products.take(5).toList();
+          return Container(
+            height: 150,
+            child: ListView.builder(
+              itemCount: hotSale.length,
+              scrollDirection: Axis.horizontal,
+              shrinkWrap: true,
+              padding: EdgeInsets.symmetric(
+                vertical: 5,
+              ),
+              itemBuilder: (context, index) {
+                return Container(
+                  height: 150,
+                  width: 150,
+                  child: FittedBox(
+                    fit: BoxFit.contain,
+                    child: ItemCard(
+                      product: hotSale[index],
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProductDetailsScreen(
+                                product: hotSale[index],
+                              ),
+                            ));
+                      },
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        } else {
+          return MyLoading();
+        }
+      },
+    );
   }
 }

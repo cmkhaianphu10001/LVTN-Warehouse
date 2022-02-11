@@ -162,6 +162,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                                   fontStyle: FontStyle.italic,
                                                 ),
                                               ),
+                                              SizedBox(
+                                                width: 10,
+                                              ),
+                                              Text(
+                                                "Sold: ${product.sold}",
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontStyle: FontStyle.italic,
+                                                ),
+                                              ),
                                               IconButton(
                                                 onPressed: () {
                                                   Navigator.push(

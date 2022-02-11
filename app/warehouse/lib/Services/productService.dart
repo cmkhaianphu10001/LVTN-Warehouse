@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:warehouse/Models/cart.dart';
+import 'package:warehouse/Models/historyModel.dart';
 import 'dart:io';
 import 'package:warehouse/Models/productModel.dart';
 import 'package:warehouse/Models/qrModel.dart';
@@ -208,7 +210,7 @@ class ProductService {
         body: jsonEncode({
           'supID': import.supplier.id,
           'importDate':
-              "${import.date.year}-${import.date.month}-${import.date.day}",
+              "${import.date.year}/${import.date.month}/${import.date.day} 10:10:10 +0000",
           'totalAmount': import.totalAmount,
           'listItem': list,
         }),
@@ -243,7 +245,7 @@ class ProductService {
         body: jsonEncode({
           'cusID': export.customer.id,
           'exportDate':
-              "${export.date.year}-${export.date.month}-${export.date.day}",
+              "${export.date.year}/${export.date.month}/${export.date.day} 10:10:10 +0000",
           'totalAmount': export.totalAmount,
           'listItem': listItem,
           'listQR': listQR,
@@ -292,6 +294,109 @@ class ProductService {
       qRs.sort((a, b) => a.importDate.compareTo(b.importDate));
       qRs = List.from(qRs.reversed);
       return qRs;
+    } catch (e) {
+      log(e);
+    }
+  }
+
+  getQRs(String token) async {
+    try {
+      var res = await http.get(
+        Uri.parse(url + 'getQRs'),
+        headers: {
+          "content-type": "application/json",
+          "authorization": token,
+        },
+      );
+      List<QRModel> qRs = (jsonDecode(res.body) as List)
+          .map((e) => QRModel.fromJson(e))
+          .toList();
+
+      qRs.sort((a, b) => a.importDate.compareTo(b.importDate));
+      qRs = List.from(qRs.reversed);
+      return qRs;
+    } catch (e) {
+      log(e);
+    }
+  }
+
+  getHistory({String userTargetID}) async {
+    SharedPreferences pre = await SharedPreferences.getInstance();
+
+    try {
+      var res = await http.get(
+        Uri.parse(url + 'getHistories'),
+        headers: userTargetID != null
+            ? {
+                "content-type": "application/json",
+                "authorization": pre.getString('token'),
+                "usertargetid": userTargetID,
+              }
+            : {
+                "content-type": "application/json",
+                "authorization": pre.getString('token'),
+              },
+      );
+
+      List<HistoryModel> histories = (jsonDecode(res.body) as List)
+          .map((e) => HistoryModel.fromJson(e))
+          .toList();
+      histories.sort(
+        (a, b) => b.date.compareTo(a.date),
+      );
+
+      List<ItemOfHistory> itemsOfHistory = await getItemOfHistory();
+      List<Product> products = await getProducts(pre.getString('token'));
+      List<QRModel> qrs = await getQRs(pre.getString('token'));
+
+      histories.forEach((HistoryModel history) {
+        history.listProduct = itemsOfHistory
+            .where((ItemOfHistory item) => item.parentID == history.id)
+            .toList();
+        history.listProduct.forEach((ItemOfHistory e) {
+          e.product =
+              products.firstWhere((product) => product.id == e.productID);
+        });
+        if (history.typeHistory == 'import') {
+          history.listProduct.forEach((ItemOfHistory e) {
+            e.qrs = qrs
+                .where((QRModel element) =>
+                    (element.importIDhistory == history.id &&
+                        element.productID == e.productID))
+                .toList();
+          });
+        } else if (history.typeHistory == 'export') {
+          history.listProduct.forEach((ItemOfHistory e) {
+            e.qrs = qrs
+                .where((QRModel element) =>
+                    (element.exportIDhistory == history.id &&
+                        element.productID == e.productID))
+                .toList();
+          });
+        }
+      });
+      return histories;
+    } catch (e) {
+      log(e);
+    }
+  }
+
+  getItemOfHistory({String parentID}) async {
+    SharedPreferences pre = await SharedPreferences.getInstance();
+
+    try {
+      var res = await http.get(
+        Uri.parse(url + 'getItemOfHistory'),
+        headers: {
+          "content-type": "application/json",
+          "authorization": pre.getString('token'),
+          "parentid": parentID,
+        },
+      );
+      List<ItemOfHistory> items = (jsonDecode(res.body) as List)
+          .map((e) => ItemOfHistory.fromJson(e))
+          .toList();
+      return items;
     } catch (e) {
       log(e);
     }

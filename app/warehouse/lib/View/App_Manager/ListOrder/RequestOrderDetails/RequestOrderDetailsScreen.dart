@@ -5,6 +5,7 @@ import 'package:warehouse/Models/orderModel.dart';
 import 'package:warehouse/Models/userModel.dart';
 import 'package:warehouse/Services/OrderService.dart';
 import 'package:warehouse/Services/profileService.dart';
+import 'package:warehouse/Services/userService.dart';
 import 'package:warehouse/View/App_Manager/Header.dart';
 import 'package:warehouse/View/App_Manager/ListOrder/exportItemByOrder/ExportItemByOrder.dart';
 import 'package:warehouse/View/App_Manager/ProductsScreen/productDetail/productDetailScreen.dart';
@@ -29,6 +30,7 @@ class _RequestOrderDetailsScreenState extends State<RequestOrderDetailsScreen> {
   final String orderID;
   bool load = false;
   OrderModel orderModel;
+  User customer;
   TextEditingController description = new TextEditingController();
 
   _RequestOrderDetailsScreenState(this.orderID);
@@ -38,8 +40,9 @@ class _RequestOrderDetailsScreenState extends State<RequestOrderDetailsScreen> {
 
   getCustomer(String customerID) async {
     SharedPreferences pre = await SharedPreferences.getInstance();
-    return await ProfileServices()
-        .getUserById(pre.getString('token'), customerID);
+    List<User> users = await UserService().getCustomer(pre.getString('token'));
+    User customer = users.firstWhere((element) => element.id == customerID);
+    return customer;
   }
 
   @override
@@ -280,7 +283,7 @@ class _RequestOrderDetailsScreenState extends State<RequestOrderDetailsScreen> {
                                 future: getCustomer(orderModel.cusID),
                                 builder: (context, snapshot) {
                                   if (snapshot.data != null) {
-                                    User customer = snapshot.data;
+                                    customer = snapshot.data;
                                     return Container(
                                       color: Colors.white,
                                       padding: EdgeInsets.all(20),
@@ -486,8 +489,9 @@ class _RequestOrderDetailsScreenState extends State<RequestOrderDetailsScreen> {
                                                   MaterialPageRoute(
                                                     builder: (context) =>
                                                         ExportItemByOrder(
-                                                            orderModel:
-                                                                orderModel),
+                                                      orderModel: orderModel,
+                                                      customer: customer,
+                                                    ),
                                                   )).then((value) {
                                                 setState(() {
                                                   load = true;

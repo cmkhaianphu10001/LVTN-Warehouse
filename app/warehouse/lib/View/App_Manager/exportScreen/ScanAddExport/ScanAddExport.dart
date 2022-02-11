@@ -195,7 +195,7 @@ class _ScanAddExportState extends State<ScanAddExport> {
                                                                 qrModel.cusID !=
                                                                         null
                                                                     ? Text(
-                                                                        'export: ${qrModel.importDate.year} - ${qrModel.importDate.month} - ${qrModel.importDate.day}',
+                                                                        'export: ${qrModel.exportDate.year} - ${qrModel.exportDate.month} - ${qrModel.exportDate.day}',
                                                                         style: TextStyle(
                                                                             fontSize:
                                                                                 12),
@@ -205,7 +205,7 @@ class _ScanAddExportState extends State<ScanAddExport> {
                                                                 qrModel.cusID !=
                                                                         null
                                                                     ? Text(
-                                                                        '\$${product.importPrice * product.ratePrice}')
+                                                                        '\$${qrModel.exportPrice}')
                                                                     : Text(
                                                                         '${null}'),
                                                                 Text(

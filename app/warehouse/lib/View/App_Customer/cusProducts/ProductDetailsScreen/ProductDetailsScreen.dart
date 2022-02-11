@@ -74,12 +74,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     return user;
   }
 
-  Future getQRs(String productID) async {
-    SharedPreferences pre = await SharedPreferences.getInstance();
-    return await ProductService()
-        .getQRsByProductID(pre.getString('token'), productID);
-  }
-
   Future getComments(String productID) async {
     return await CommentService().getCommentsOfProduct(productID);
   }
@@ -163,7 +157,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                             CrossAxisAlignment.start,
                                         children: <Widget>[
                                           Text(
-                                            "Price: \$${product.importPrice * product.ratePrice}",
+                                            "Price: \$${(product.importPrice * product.ratePrice).toStringAsFixed(2)}",
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontStyle: FontStyle.italic,
@@ -186,25 +180,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                               SizedBox(
                                                 width: 10,
                                               ),
-                                              FutureBuilder(
-                                                  future: getQRs(product.id),
-                                                  builder: (context, snapshot) {
-                                                    if (snapshot.data != null) {
-                                                      List<QRModel> qrs =
-                                                          snapshot.data;
-                                                      return Text(
-                                                        "Sold: ${qrs.where((element) => element.cusID != null).toList().length}",
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontStyle:
-                                                              FontStyle.italic,
-                                                        ),
-                                                      );
-                                                    } else {
-                                                      return MyLoading();
-                                                    }
-                                                  }),
+                                              Text(
+                                                "Sold: ${product.sold}",
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontStyle: FontStyle.italic,
+                                                ),
+                                              ),
                                             ],
                                           ),
                                           SizedBox(

@@ -11,7 +11,9 @@ const {
     ImportProducts,
     ExportProducts,
     GetQRs,
-    GetQRbyID
+    GetQRbyID,
+    GetHistories,
+    GetItemOfHistory
 } = require('../Controllers/importExportController');
 
 router.route('/addNewProduct').post(addNewProduct);
@@ -26,5 +28,7 @@ router.route('/importProducts').post(ImportProducts);
 router.route('/exportProducts').post(ExportProducts);
 router.route('/getQRs').get(GetQRs);
 router.route('/getQRByID').get(GetQRbyID);
+router.route('/getHistories').get(GetHistories);
+router.route('/getItemOfHistory').get(GetItemOfHistory);
 
 module.exports = router;

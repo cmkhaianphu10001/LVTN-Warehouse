@@ -11,6 +11,7 @@ const productSchema = new Schema({
     description: { type: String, },
     // comment: [{ type: String }],
     stored: { type: String, },
+    sold: { type: Number },
 },
     {
         timestamps: true
