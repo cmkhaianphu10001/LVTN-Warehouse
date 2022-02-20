@@ -112,62 +112,65 @@ class ItemCard extends StatelessWidget {
         color: Colors.grey[100],
         // color: Colors.red,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          GestureDetector(
-            onTap: onTap,
-            child: Stack(
-              children: <Widget>[
-                Container(
-                    padding: EdgeInsets.all(5),
-                    height: size.width * 0.25,
-                    width: size.width * 0.3,
-                    // color: Colors.blueAccent,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: my_org),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Image.network(
-                      getdownloadUriFromDB(undealProduct.image),
-                      fit: BoxFit.contain,
-                    )),
-                undealProduct.supplierConfirm
-                    ? SizedBox()
-                    : Positioned(
-                        top: 0,
-                        right: 0,
-                        child: Container(
-                          height: 10,
-                          width: 10,
-                          decoration: BoxDecoration(
-                              color: Colors.red,
-                              borderRadius: BorderRadius.circular(5),
-                              boxShadow: [
-                                BoxShadow(
-                                  blurRadius: 2,
-                                  spreadRadius: 1,
-                                  offset: Offset(0, 2),
-                                  color: Colors.grey,
-                                )
-                              ]),
-                        ),
+      child: FittedBox(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            GestureDetector(
+              onTap: onTap,
+              child: Stack(
+                children: <Widget>[
+                  Container(
+                      padding: EdgeInsets.all(5),
+                      height: size.width * 0.25,
+                      width: size.width * 0.3,
+                      // color: Colors.blueAccent,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: my_org),
+                        borderRadius: BorderRadius.circular(10),
                       ),
-              ],
+                      child: Image.network(
+                        getdownloadUriFromDB(undealProduct.image),
+                        fit: BoxFit.contain,
+                      )),
+                  undealProduct.supplierConfirm
+                      ? SizedBox()
+                      : Positioned(
+                          top: 0,
+                          right: 0,
+                          child: Container(
+                            height: 10,
+                            width: 10,
+                            decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(5),
+                                boxShadow: [
+                                  BoxShadow(
+                                    blurRadius: 2,
+                                    spreadRadius: 1,
+                                    offset: Offset(0, 2),
+                                    color: Colors.grey,
+                                  )
+                                ]),
+                          ),
+                        ),
+                ],
+              ),
             ),
-          ),
-          Text(
-            '${undealProduct.productName != null ? undealProduct.productName : 'ss'}',
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
+            Text(
+              '${undealProduct.productName != null ? undealProduct.productName : 'ss'}',
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-          Text(
-              '\$${undealProduct.importPrice != null ? undealProduct.importPrice : ''}'),
-          Text('Unit: ${undealProduct.unit != null ? undealProduct.unit : ''}'),
-        ],
+            Text(
+                '\$${undealProduct.importPrice != null ? undealProduct.importPrice : ''}'),
+            Text(
+                'Unit: ${undealProduct.unit != null ? undealProduct.unit : ''}'),
+          ],
+        ),
       ),
     );
   }

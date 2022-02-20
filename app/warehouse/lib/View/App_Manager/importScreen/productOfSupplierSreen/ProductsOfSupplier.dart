@@ -86,6 +86,7 @@ class _ProductsOfSupplierState extends State<ProductsOfSupplier> {
                                   horizontal: size.height * 0.01,
                                 ),
                                 child: GridView.builder(
+                                  padding: EdgeInsets.all(0),
                                   itemCount: snapshot.data.length,
                                   gridDelegate:
                                       SliverGridDelegateWithFixedCrossAxisCount(
@@ -141,40 +142,42 @@ class ItemCard extends StatelessWidget {
         color: Colors.grey[100],
         // color: Colors.red,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          GestureDetector(
-            onTap: onTap,
-            child: Stack(
-              children: <Widget>[
-                Container(
-                    padding: EdgeInsets.all(5),
-                    height: size.width * 0.25,
-                    width: size.width * 0.3,
-                    // color: Colors.blueAccent,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: my_org),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Image.network(
-                      getdownloadUriFromDB(product.image),
-                      fit: BoxFit.contain,
-                    )),
-              ],
+      child: FittedBox(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            GestureDetector(
+              onTap: onTap,
+              child: Stack(
+                children: <Widget>[
+                  Container(
+                      padding: EdgeInsets.all(5),
+                      height: size.width * 0.25,
+                      width: size.width * 0.3,
+                      // color: Colors.blueAccent,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: my_org),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Image.network(
+                        getdownloadUriFromDB(product.image),
+                        fit: BoxFit.contain,
+                      )),
+                ],
+              ),
             ),
-          ),
-          Text(
-            '${product.productName != null ? product.productName : 'ss'}',
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
+            Text(
+              '${product.productName != null ? product.productName : 'ss'}',
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-          Text('\$${product.importPrice != null ? product.importPrice : ''}'),
-          Text('Unit: ${product.unit != null ? product.unit : ''}'),
-        ],
+            Text('\$${product.importPrice != null ? product.importPrice : ''}'),
+            Text('Unit: ${product.unit != null ? product.unit : ''}'),
+          ],
+        ),
       ),
     );
   }

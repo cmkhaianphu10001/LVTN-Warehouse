@@ -151,25 +151,13 @@ class _SupplierProductDetailsScreenState
                                               SizedBox(
                                                 width: 10,
                                               ),
-                                              FutureBuilder(
-                                                  future: getQRs(product.id),
-                                                  builder: (context, snapshot) {
-                                                    if (snapshot.data != null) {
-                                                      List<QRModel> qrs =
-                                                          snapshot.data;
-                                                      return Text(
-                                                        "Sold: ${qrs.where((element) => element.cusID != null).toList().length}",
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontStyle:
-                                                              FontStyle.italic,
-                                                        ),
-                                                      );
-                                                    } else {
-                                                      return MyLoading();
-                                                    }
-                                                  }),
+                                              Text(
+                                                "Sold: ${product.sold}",
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontStyle: FontStyle.italic,
+                                                ),
+                                              ),
                                             ],
                                           ),
                                           SizedBox(
