@@ -354,17 +354,18 @@ class _BodyState extends State<Body> {
   }
 
   _listBottom() {
-    return FutureBuilder(
-      builder: (context, snapshot) {
-        if (snapshot.data != null) {
-          return Container(
-            height: 50,
-            color: Colors.red,
-          );
-        } else {
-          return MyLoading();
-        }
-      },
-    );
+    // return FutureBuilder(
+    //   builder: (context, snapshot) {
+    //     if (snapshot.data != null) {
+    //       return Container(
+    //         height: 50,
+    //         color: Colors.red,
+    //       );
+    //     } else {
+    //       return MyLoading();
+    //     }
+    //   },
+    // );
+    return Container();
   }
 }
